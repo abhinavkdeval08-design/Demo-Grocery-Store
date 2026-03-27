@@ -1,24 +1,50 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+// app/_layout.tsx
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { Platform } from "react-native";
+import { theme } from "../theme";
+import { CartProvider } from "./cart/CartContext";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+    <CartProvider>
+      <StatusBar
+        style="light"
+        backgroundColor={theme.colors.background}
+        translucent={true}
+      />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          headerStyle: {
+            backgroundColor: "transparent",
+          },
+          headerTintColor: theme.colors.textPrimary,
+          headerTitleStyle: {
+            fontWeight: "700",
+            fontSize: 18,
+            letterSpacing: 0.4,
+          },
+          headerShadowVisible: false,
+          headerTransparent: true,
+          contentStyle: {
+            backgroundColor: theme.colors.background,
+          },
+          animation: Platform.select({
+            ios: "slide_from_right",
+            android: "fade",
+          }),
+          gestureEnabled: true,
+        }}
+      >
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    </CartProvider>
   );
 }
