@@ -1,50 +1,83 @@
-# Welcome to your Expo app 👋
+# 🛒 Demo Grocery Store App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern **React Native grocery ordering app** that allows users to browse products, add items to cart, and place orders directly via WhatsApp — making it simple and efficient for local shop owners.
 
-## Get started
+---
 
-1. Install dependencies
+## 🚀 Problem
 
-   ```bash
-   npm install
-   ```
+Small grocery store owners often don’t have access to complex e-commerce systems.  
+Managing orders digitally becomes expensive and difficult.
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## 💡 Solution
 
-In the output, you'll find options to open the app in a
+This app provides a **lightweight ordering system** where:
+- Customers can browse products 📱  
+- Add items to cart 🛒  
+- Place orders via WhatsApp instantly 💬  
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+👉 No complex backend required.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+## ✨ Key Features
 
-When you're ready, run:
+- 🛍️ Product browsing UI  
+- ➕ Add to cart functionality  
+- 📦 Order summary generation  
+- 💬 WhatsApp integration for order placement  
+- ⚡ Fast and simple user experience  
 
-```bash
-npm run reset-project
-```
+---
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 🛠️ Tech Stack
 
-## Learn more
+- **Frontend:** React Native  
+- **Integration:** WhatsApp via Linking API  
 
-To learn more about developing your project with Expo, look at the following resources:
+---
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
-## Join the community
 
-Join our community of developers creating universal apps.
+## ⚙️ How It Works
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+1. User selects products  
+2. Adds them to cart  
+3. Clicks “Place Order”  
+4. WhatsApp opens with pre-filled message  
+5. Shop owner receives order details  
+
+---
+
+## 🔐 Note on Data
+
+This project uses **demo/sample data only**.  
+No real personal or business information is included.
+
+---
+
+## 👥 Contributors
+
+- **Abhinav** — Core logic & app architecture  
+- **Aanya** — UI development & components  
+
+---
+
+## 🌱 Future Improvements
+
+- User authentication  
+- Order history  
+- Payment integration  
+- Backend-based order management  
+
+---
+
+## 💡 Inspiration
+
+Built to simplify ordering for small local businesses using tools they already use — like WhatsApp.
+
+---
+
+⭐ *If you like this project, consider starring the repo!*
