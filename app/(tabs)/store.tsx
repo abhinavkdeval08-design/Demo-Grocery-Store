@@ -2,16 +2,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 const STORE_INFO = {
-  name: "AWAD TRADING COMPANY",
-  owner: "LOON DAN",
-  phone: "+91 63775 96085",
-  phone2: "+91 78782 77563",
+  name: "Demo Grocery Store",
+  owner: "Mr. John",
+  phone: "+91 9000000000",
+  phone2:"+91 8000000000",
   address:
-    "Shree Ram Market, Ravat Abadi Fanta,\nDistt. Bikaner, Rajasthan – 334001",
+    "Sample Address, Kolkata, India",
   timing: "Mon–Sat · 7:00 AM – 9:00 PM\nSunday · 8:00 AM – 2:00 PM",
   delivery:
     "Free delivery within 5 km radius.\nMinimum order · ₹500\nDelivery time · Same day or next morning.",
-  upi: "awadtrading@upi",
+  upi: "demo@upi",
   established: "April 2024",
 };
 
@@ -97,7 +97,7 @@ export default function Store() {
         <View style={styles.inlineTagRow}>
           <Ionicons name="navigate" size={12} color="#9CA3AF" />
           <Text style={styles.inlineTagText}>
-            Landmark · Shree Ram Market, Ravat Abadi Fanta
+            Landmark · Demo city
           </Text>
         </View>
       </View>
@@ -148,7 +148,7 @@ export default function Store() {
       <View style={styles.footerNote}>
         <Ionicons name="information-circle" size={16} color="#6B7280" />
         <Text style={styles.footerText}>
-          Store details are maintained by Awad Trading. For corrections, reach
+          Store details are maintained by Grocery Store. For corrections, reach
           out on the contact numbers above.
         </Text>
       </View>
