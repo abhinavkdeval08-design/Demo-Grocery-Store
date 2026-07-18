@@ -1,69 +1,68 @@
-<h1 align="center">🛒 Demo Grocery Store App</h1>
+<h1 align="center">🛒 Production-Ready Mobile Commerce Sandbox</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
-  <img src="https://img.shields.io/badge/WhatsApp_Integration-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/WhatsApp_API-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" />
 </p>
 
 <p align="center">
-  <b>A lightweight, high-performance mobile commerce engine designed for local businesses.</b>
+  <b>A lightweight, strict-typed cross-platform storefront layout optimizing dynamic client-side inventory structures for local vendors.</b>
 </p>
 
 ---
 
-### 🚀 The Challenge
-Small-scale vendors often struggle with complex, expensive e-commerce overheads. Managing inventory, orders, and payments digitally usually requires a dedicated backend and technical expertise that many local shop owners lack.
+### 🚀 The Operational Challenge
+Small-scale vendors face excessive computational and financial overhead when executing heavy cloud-centric e-commerce setups. Managing relational databases, server instances, and payment states requires extensive technical integration that disrupts high-speed micro-merchant workflows.
 
-### 💡 The Solution
-I've engineered a **Zero-Backend Ordering System**. This app leverages the tools businesses already use—WhatsApp. It bridges the gap between digital browsing and instant manual ordering without the need for costly server maintenance.
-
----
-
-### ✨ Core Engine Features
-
-* **📱 Native Catalog UI:** A clean, responsive product browsing experience built with React Native.
-* **🛒 Dynamic Cart Logic:** Real-time state management for adding, removing, and updating item quantities.
-* **📋 Smart Order Summarization:** Automatically generates a structured text-based invoice from the user's cart.
-* **💬 WhatsApp Linking API:** Direct one-tap transmission of the order summary to the vendor's WhatsApp number.
-* **⚡ Optimized Performance:** Minimalist architecture ensuring fast load times even on budget devices.
+### 💡 The Implementation Vector
+Engineered a **Decentralized Client-Driven Architecture**. The application shifts full operational state overhead to the client environment, rendering dynamic cart layouts locally and leveraging direct IPC/deep-linking protocols via the WhatsApp API. This bypasses the necessity for production servers while preserving absolute data transmission privacy.
 
 ---
 
-### 🛠️ Tech Arsenal
+### ✨ Core Structural Modules
 
-| Layer | Technology | Purpose |
+* **📱 Strict-Typed Catalog Framework:** Modular, performance-optimized layout architecture built entirely using dynamic matrix loops on React Native components.
+* **🛒 Dynamic Context Hooks:** Centralized client-side state machine manipulating granular inventory data arrays, count mutation pools, and cumulative subtotal evaluations.
+* **📋 Real-Time Invoice Processing:** Native algorithmic parser that extracts state snapshots and transforms them into clean, standardized markdown arrays for vendor logs.
+* **💬 Intent Interceptor Engine:** Deep-linking wrapper utilizing React Native `Linking` interfaces to transfer structured string schemas into the native messaging layer.
+
+---
+
+### 🛠️ Architecture Core Matrix
+
+| Infrastructure Layer | Engine Technology | Scope & Implementation Metrics |
 | :--- | :--- | :--- |
-| **Frontend** | React Native | Cross-platform mobile development |
-| **Logic** | JavaScript (ES6+) | Core app functionality & State management |
-| **Communication** | WhatsApp Linking API | Direct vendor-customer interaction |
-| **Styling** | Flexbox & Native Components | Clean, intuitive User Interface |
+| **Client Interface** | React Native | Modular dynamic layouts & UI primitives |
+| **Logic & Typings** | TypeScript 5.x | Strict-typed state controllers & interface definitions |
+| **Deep-Linking** | WhatsApp Linking API | System-level IPC for customer intent transmission |
+| **Layout Matrix** | Flexbox Engine | Explicit structural component mapping & responsive hooks |
 
 ---
 
-### ⚙️ The Workflow
+### ⚙️ Execution Flow
 
-1.  **Selection:** User browses the digital aisles and selects products.
-2.  **Staging:** Items are stored in a dynamic cart with an instant total calculation.
-3.  **Transmission:** User clicks "Place Order," triggering the WhatsApp Linking API.
-4.  **Completion:** The shop owner receives a pre-formatted message with the product list, quantities, and customer intent.
-
----
-
-### 👤 Author & Developer
-
-* **Abhinav Deval** — *Solo Developer & System Architect*
+1. **Inventory Parsing:** The runtime container loads mock JSON tables to stream UI state buffers into strict-typed catalog grids.
+2. **Context Buffering:** State actions register user mutations, keeping global layout computations synchronized with low memory footprints.
+3. **Deep-Link Compilation:** The client converts internal data states into base-URL encoded strings, invoking deep-link dispatch schemes.
+4. **State Delivery:** The communication endpoint decrypts the structure, filling out the vendor’s queue without external network lookups.
 
 ---
 
-### 🌱 Roadmap & Scaling
-* [ ] **User Persistence:** Implementing Local Storage/AsyncStorage for order history.
-* [ ] **Dynamic Pricing:** Integration of real-time discount codes and tax calculations.
-* [ ] **Payment Gateway:** Adding UPI-based deep linking for instant settlements.
+### 👤 Engineering Lifecycle
+
+* **Abhinav Deval** — *Solo Systems Developer*
+
+---
+
+### 🌱 Architectural Optimization Roadmap
+* [ ] **Local Pipeline Persistence:** Implement high-speed cache configurations using async structural storage blocks.
+* [ ] **Dynamic Strategy Integration:** Add runtime layout triggers for real-time coupon evaluation grids.
+* [ ] **Native Payment Bindings:** Inject deep-linked UPI URI configurations for instant transaction processing.
 
 ---
 
 <p align="center">
-  <i>"Empowering local businesses through minimalist tech."</i> <br>
-  <b>Built with ❤️ at IIIT Kalyani</b>
+  <i>"Optimizing high-efficiency client-side environments with zero server dependencies."</i> <br>
+  <b>Engineered at IIIT Kalyani</b>
 </p>
