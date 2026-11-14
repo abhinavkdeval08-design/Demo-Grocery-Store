@@ -2,18 +2,19 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { PRODUCTS } from "../../data/products";
+import { useCatalog } from "../../context/CatalogContext";
 import { useCart } from "../../context/CartContext";
 import { theme } from "../../theme";
 
 export default function Orders() {
+  const { products } = useCatalog();
   const { orders, addToCart } = useCart();
   const router = useRouter();
   const reorder = (order: (typeof orders)[number]) => {
-    const available = order.items.filter((item) => PRODUCTS.some((product) => product.id === item.id));
+    const available = order.items.filter((item) => products.some((product) => product.id === item.id));
     const missing = order.items.length - available.length;
     available.forEach((item) => {
-      const product = PRODUCTS.find((candidate) => candidate.id === item.id);
+      const product = products.find((candidate) => candidate.id === item.id);
       if (product) for (let i = 0; i < item.quantity; i += 1) addToCart(product);
     });
     if (missing) Alert.alert("Some items unavailable", `${missing} item${missing === 1 ? "" : "s"} could not be added.`);

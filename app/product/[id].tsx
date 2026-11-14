@@ -5,14 +5,15 @@ import * as Haptics from "expo-haptics";
 import React from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ProductCard from "../../components/ProductCard";
-import { PRODUCTS } from "../../data/products";
+import { useCatalog } from "../../context/CatalogContext";
 import { useCart } from "../../context/CartContext";
 import { theme } from "../../theme";
 
 export default function ProductDetail() {
+  const { products } = useCatalog();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const product = PRODUCTS.find((item) => item.id === id);
+  const product = products.find((item) => item.id === id);
   const { items, addToCart, removeFromCart } = useCart();
   if (!product) return <View style={styles.center}><Text style={styles.title}>Product not found</Text></View>;
   const quantity = items.find((item) => item.id === product.id)?.quantity ?? 0;
@@ -29,7 +30,7 @@ export default function ProductDetail() {
         <TouchableOpacity accessibilityLabel={`Add ${product.name} to cart`} style={styles.add} onPress={() => { addToCart(product); Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success); }}><Text style={styles.addText}>{quantity ? "Add one more" : "Add to cart"}</Text></TouchableOpacity>
       </View>}
       <Text style={styles.section}>You might also like</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.related}>{PRODUCTS.filter((item) => item.category === product.category && item.id !== product.id).slice(0, 4).map((item) => <View key={item.id} style={styles.relatedCard}><ProductCard product={item} /></View>)}</ScrollView>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.related}>{products.filter((item) => item.category === product.category && item.id !== product.id).slice(0, 4).map((item) => <View key={item.id} style={styles.relatedCard}><ProductCard product={item} /></View>)}</ScrollView>
     </ScrollView>
   </View>;
 }

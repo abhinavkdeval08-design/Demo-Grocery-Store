@@ -5,10 +5,13 @@ import React from "react";
 import { Platform } from "react-native";
 import { theme } from "../theme";
 import { CartProvider } from "../context/CartContext";
+import { CartCatalogSync, CatalogProvider } from "../context/CatalogContext";
 
 export default function RootLayout() {
   return (
     <CartProvider>
+      <CatalogProvider>
+      <CartCatalogSync />
       <StatusBar
         style="light"
         backgroundColor={theme.colors.background}
@@ -44,6 +47,7 @@ export default function RootLayout() {
           }}
         />
       </Stack>
+      </CatalogProvider>
     </CartProvider>
   );
 }

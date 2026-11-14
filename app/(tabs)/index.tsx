@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { BANNERS } from "../../data/banners";
-import { PRODUCTS } from "../../data/products";
+import { useCatalog } from "../../context/CatalogContext";
 import { STORE } from "../../config/store";
 import { useCart } from "../../context/CartContext";
 import { useProductSearch } from "../../hooks/useProductSearch";
@@ -18,14 +18,15 @@ const CATEGORIES = [
 ] as const;
 
 export default function Home() {
+  const { products } = useCatalog();
   const router = useRouter();
   const { addToCart } = useCart();
-  const { query, setQuery, results, recent, submitSearch } = useProductSearch(PRODUCTS);
+  const { query, setQuery, results, recent, submitSearch } = useProductSearch(products);
   const [banner, setBanner] = React.useState(0);
   React.useEffect(() => { const timer = setInterval(() => setBanner((value) => (value + 1) % BANNERS.length), 4500); return () => clearInterval(timer); }, []);
   const sections = [
-    { title: "Popular picks", items: PRODUCTS.slice(0, 6) },
-    { title: "Under ₹100", items: PRODUCTS.filter((item) => item.price < 100).slice(0, 6) },
+    { title: "Popular picks", items: products.slice(0, 6) },
+    { title: "Under ₹100", items: products.filter((item) => item.price < 100).slice(0, 6) },
   ];
   const searchActive = query.trim().length > 0;
   return <View style={styles.screen}>
@@ -36,7 +37,7 @@ export default function Home() {
       <View style={styles.searchBox}><Ionicons name="search" size={19} color={theme.colors.textSecondary} /><TextInput accessibilityLabel="Search products" value={query} onChangeText={setQuery} onSubmitEditing={() => submitSearch()} returnKeyType="search" placeholder="Search rice, sugar, milk..." placeholderTextColor="#6B7280" style={styles.search} />{query ? <TouchableOpacity accessibilityLabel="Clear search" onPress={() => setQuery("")}><Ionicons name="close-circle" size={18} color={theme.colors.textSecondary} /></TouchableOpacity> : null}</View>
       {searchActive ? <View><Text style={styles.heading}>Search results</Text>{results.length ? <View style={styles.grid}>{results.map((item) => <ProductCard key={item.id} product={item} />)}</View> : <View style={styles.empty}><Ionicons name="search-outline" size={34} color="#6B7280" /><Text style={styles.emptyText}>No matches yet. Try another item.</Text></View>}{recent.length ? <Text style={styles.recent}>Recent: {recent.join("  ·  ")}</Text> : null}</View> : <>
         <Text style={styles.heading}>Shop by category</Text><View style={styles.categories}>{CATEGORIES.map(([name, icon]) => <TouchableOpacity accessibilityLabel={`Shop ${name}`} key={name} style={styles.category} onPress={() => router.push({ pathname: "/(tabs)/products", params: { filter: name } })}><Ionicons name={icon} size={23} color={theme.colors.accent} /><Text style={styles.categoryText}>{name}</Text></TouchableOpacity>)}</View>
-        <Text style={styles.heading}>Buy again</Text><ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.row}>{PRODUCTS.slice(0, 4).map((item) => <TouchableOpacity accessibilityLabel={`Quick add ${item.name}`} key={item.id} style={styles.quick} onPress={() => addToCart(item)}><Image source={item.image} style={styles.quickImage} /><Text style={styles.quickName} numberOfLines={1}>{item.name}</Text><Text style={styles.quickPrice}>₹{item.price}</Text></TouchableOpacity>)}</ScrollView>
+        <Text style={styles.heading}>Buy again</Text><ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.row}>{products.slice(0, 4).map((item) => <TouchableOpacity accessibilityLabel={`Quick add ${item.name}`} key={item.id} style={styles.quick} onPress={() => addToCart(item)}><Image source={item.image} style={styles.quickImage} /><Text style={styles.quickName} numberOfLines={1}>{item.name}</Text><Text style={styles.quickPrice}>₹{item.price}</Text></TouchableOpacity>)}</ScrollView>
         {sections.map((section) => <View key={section.title}><View style={styles.headingRow}><Text style={styles.heading}>{section.title}</Text><TouchableOpacity accessibilityLabel={`See all ${section.title}`} onPress={() => router.push("/(tabs)/products")}><Text style={styles.seeAll}>See all</Text></TouchableOpacity></View><View style={styles.grid}>{section.items.map((item) => <ProductCard key={item.id} product={item} />)}</View></View>)}
       </>}
     </ScrollView><CartBar />

@@ -7,7 +7,7 @@ import { sanitizeCustomer, sanitizeItems, sanitizeOrders } from "../utils/persis
 const STORAGE_KEY = "@awad-trading/cart-state";
 type CartContextType = {
   items: CartItem[]; addToCart: (product: Product) => void; removeFromCart: (id: string) => void;
-  clearCart: () => void; totalItems: number; totalPrice: number; customer: Customer;
+  clearCart: () => void; replaceItems: (items: CartItem[]) => void; totalItems: number; totalPrice: number; customer: Customer;
   addresses: Address[]; saveAddress: (address: Address) => void; deleteAddress: (id: string) => void;
   orders: Order[]; saveOrder: (order: Order) => void; hydrated: boolean;
 };
@@ -37,13 +37,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const addToCart = (product: Product) => setItems((old) => addItem(old, product));
   const removeFromCart = (id: string) => setItems((old) => removeItem(old, id));
   const clearCart = () => setItems([]);
+  const replaceItems = (next: CartItem[]) => setItems(next);
   const saveAddress = (address: Address) => setCustomer((old) => ({
     ...old, name: address.name, phone: address.phone,
     addresses: old.addresses.some((item) => item.id === address.id) ? old.addresses.map((item) => item.id === address.id ? address : item) : [...old.addresses, address],
   }));
   const deleteAddress = (id: string) => setCustomer((old) => ({ ...old, addresses: old.addresses.filter((item) => item.id !== id) }));
   const saveOrder = (order: Order) => setOrders((old) => [order, ...old]);
-  const value = useMemo(() => ({ items, addToCart, removeFromCart, clearCart, customer, addresses: customer.addresses, saveAddress, deleteAddress, orders, saveOrder, hydrated, ...cartTotals(items) }), [items, customer, orders, hydrated]);
+  const value = useMemo(() => ({ items, addToCart, removeFromCart, clearCart, replaceItems, customer, addresses: customer.addresses, saveAddress, deleteAddress, orders, saveOrder, hydrated, ...cartTotals(items) }), [items, customer, orders, hydrated]);
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 export function useCart(): CartContextType {

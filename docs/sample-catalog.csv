@@ -1,0 +1,4 @@
+id,name,unit,price,mrp,category,image,inStock,description
+rice_01,Basmati Rice,5 kg bag,540,620,Staples,https://example.com/rice.jpg,yes,Long grain aged basmati
+dal_01,Toor Dal,1 kg,160,175,Staples,,yes,
+oil_01,Sunflower Oil,1 L,145,,Staples,,no,Out of stock for now

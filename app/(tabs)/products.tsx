@@ -4,18 +4,19 @@ import React from "react";
 import { FlatList, RefreshControl, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ProductCard from "../../components/ProductCard";
-import { PRODUCTS } from "../../data/products";
+import { useCatalog } from "../../context/CatalogContext";
 import { STORE } from "../../config/store";
 import { theme } from "../../theme";
 import { useProductSearch } from "../../hooks/useProductSearch";
 import CartBar from "../../components/CartBar";
 
 export default function Products() {
+  const { products, refresh, error } = useCatalog();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ filter?: string }>();
-  const categories = React.useMemo(() => ["All", ...new Set(PRODUCTS.map((item) => item.category))], []);
+  const categories = React.useMemo(() => ["All", ...new Set(products.map((item) => item.category))], [products]);
   const [activeFilter, setActiveFilter] = React.useState(params.filter && categories.includes(params.filter) ? params.filter : "All");
-  const { query: search, setQuery: setSearch, results: searchedProducts } = useProductSearch(PRODUCTS);
+  const { query: search, setQuery: setSearch, results: searchedProducts } = useProductSearch(products);
   const [sort, setSort] = React.useState<"default" | "low" | "high" | "name">("default");
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -25,14 +26,14 @@ export default function Products() {
 
   const filteredProducts = React.useMemo(() => {
     const query = search.trim().toLowerCase();
-    const result = PRODUCTS.filter((product) =>
+    const result = products.filter((product) =>
       (activeFilter === "All" || product.category === activeFilter) &&
       (!query || searchedProducts.some((result) => result.id === product.id)),
     );
     return [...result].sort((a, b) =>
       sort === "low" ? a.price - b.price : sort === "high" ? b.price - a.price : sort === "name" ? a.name.localeCompare(b.name) : 0,
     );
-  }, [activeFilter, search, sort, searchedProducts]);
+  }, [activeFilter, search, sort, searchedProducts, products]);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + 32 }]}>
@@ -40,6 +41,7 @@ export default function Products() {
         <View><Text style={styles.screenTitle}>Shop</Text><Text style={styles.screenSubtitle}>All items from {STORE.name} in one place.</Text></View>
         <Ionicons name="funnel-outline" size={20} color={theme.colors.textSecondary} />
       </View>
+      {error ? <Text accessibilityRole="alert" style={styles.notice}>Showing saved prices. Could not refresh right now.</Text> : null}
       <View style={styles.searchBox}>
         <Ionicons name="search" size={18} color={theme.colors.textSecondary} />
         <TextInput accessibilityLabel="Search products" value={search} onChangeText={setSearch} placeholder="Search products" placeholderTextColor="#6B7280" style={styles.search} />
@@ -59,7 +61,7 @@ export default function Products() {
         data={filteredProducts}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); setTimeout(() => setRefreshing(false), 500); }} tintColor={theme.colors.accent} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={async () => { setRefreshing(true); await refresh(); setRefreshing(false); }} tintColor={theme.colors.accent} />}
         ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
         renderItem={({ item }) => <ProductCard product={item} horizontal />}
         ListEmptyComponent={<Text style={styles.empty}>No products found.</Text>}
@@ -70,6 +72,7 @@ export default function Products() {
 }
 
 const styles = StyleSheet.create({
+  notice: { color: "#FACC15", fontSize: 12, marginHorizontal: 16, marginBottom: 8 },
   container: { flex: 1, backgroundColor: theme.colors.background },
   headerRow: { paddingHorizontal: 16, marginBottom: 12, flexDirection: "row", justifyContent: "space-between" },
   screenTitle: { fontSize: 22, fontWeight: "700", color: theme.colors.textPrimary },

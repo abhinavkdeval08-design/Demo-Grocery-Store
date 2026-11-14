@@ -1,8 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { STORE } from "../../config/store";
+import { useCatalog } from "../../context/CatalogContext";
 
 export default function Store() {
+  const { lastUpdated, error } = useCatalog();
+  const updatedText = lastUpdated ? `Prices last updated: ${new Date(lastUpdated).toLocaleString()}${error ? " (could not refresh)" : ""}` : "Prices: built-in list";
   return (
     <ScrollView
       style={styles.container}
@@ -108,6 +111,7 @@ export default function Store() {
           <Text style={styles.cardTitle}>Delivery details</Text>
         </View>
         <Text style={styles.cardValue}>{STORE.delivery}</Text>
+        <Text style={styles.cardValue}>{updatedText}</Text>
         <View style={styles.deliveryTagRow}>
           <View style={styles.deliveryTag}>
             <Ionicons name="checkmark-circle" size={12} color="#6EE7B7" />
