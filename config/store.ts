@@ -10,4 +10,7 @@ export const STORE = {
   delivery:
     "Free delivery within 5 km radius.\nMinimum order · ₹500\nDelivery time · Same day or next morning.",
   established: "April 2024",
+  minOrder: 500,
+  freeDeliveryAbove: 500,
+  deliveryFee: 40,
 } as const;
