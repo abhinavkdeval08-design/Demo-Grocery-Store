@@ -17,7 +17,7 @@ type Props = {
   badgeText?: string;
 };
 
-export default function ProductCard({ product, onAdd, horizontal = false, badgeText }: Props) {
+export default function ProductCard({ product, onAdd, onPress, horizontal = false, badgeText }: Props) {
   const router = useRouter();
   const { items, addToCart, removeFromCart } = useCart();
   const quantity = items.find((item) => item.id === product.id)?.quantity ?? 0;
