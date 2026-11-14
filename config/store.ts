@@ -5,6 +5,8 @@ export const STORE = {
   phone: "+91 9000000000",
   alternatePhone: "+91 8000000000",
   upiId: "demo@upi",
+  /** Published Google Sheet CSV link or JSON file URL. Leave empty to use the bundled data/products.ts. See docs/OWNER_GUIDE.md. */
+  catalogUrl: "",
   address: "Sample Address, Kolkata, India",
   deliveryAddress: "Santosh Nagar",
   deliveryPromise: "20–30 mins",
