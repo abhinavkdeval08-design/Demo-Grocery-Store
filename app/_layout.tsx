@@ -6,11 +6,13 @@ import { Platform } from "react-native";
 import { theme } from "../theme";
 import { CartProvider } from "../context/CartContext";
 import { CartCatalogSync, CatalogProvider } from "../context/CatalogContext";
+import { KhataProvider } from "../context/KhataContext";
 
 export default function RootLayout() {
   return (
     <CartProvider>
       <CatalogProvider>
+      <KhataProvider>
       <CartCatalogSync />
       <StatusBar
         style="light"
@@ -47,6 +49,7 @@ export default function RootLayout() {
           }}
         />
       </Stack>
+      </KhataProvider>
       </CatalogProvider>
     </CartProvider>
   );
