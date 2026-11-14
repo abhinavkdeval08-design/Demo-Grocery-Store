@@ -40,6 +40,7 @@ export type Order = {
   total: number;
   couponCode?: string;
   paymentMethod: PaymentMethod;
+  status: "placed" | "pending";
   note?: string;
   createdAt: string;
 };
@@ -51,4 +52,5 @@ export type Coupon = {
   value: number;
   minOrder?: number;
   maxDiscount?: number;
+  expiresAt: string;
 };
