@@ -73,10 +73,10 @@ const styles = StyleSheet.create({
   priceRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   price: { fontSize: 16, fontWeight: "700", color: theme.colors.accent },
   mrp: { fontSize: 11, color: "#6B7280", textDecorationLine: "line-through" },
-  addButton: { flexDirection: "row", alignItems: "center", paddingHorizontal: 10, paddingVertical: 6, borderRadius: 999, backgroundColor: theme.colors.accent, gap: 4 },
+  addButton: { minHeight: 44, flexDirection: "row", alignItems: "center", paddingHorizontal: 10, borderRadius: 999, backgroundColor: theme.colors.accent, gap: 4 },
   addText: { fontSize: 12, fontWeight: "700", color: "#022C22" },
   stepper: { flexDirection: "row", alignItems: "center", borderRadius: 999, backgroundColor: theme.colors.accent, minHeight: 34 },
-  stepButton: { width: 34, height: 34, alignItems: "center", justifyContent: "center" },
+  stepButton: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
   quantity: { minWidth: 18, textAlign: "center", fontSize: 13, fontWeight: "700", color: "#022C22" },
   outOfStock: { fontSize: 11, color: "#FCA5A5", fontWeight: "600" },
 });
