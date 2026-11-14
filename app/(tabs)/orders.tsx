@@ -4,6 +4,7 @@ import React from "react";
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useCatalog } from "../../context/CatalogContext";
 import { useCart } from "../../context/CartContext";
+import { planReorder, reorderMessage } from "../../utils/buyAgain";
 import { theme } from "../../theme";
 
 export default function Orders() {
@@ -11,14 +12,11 @@ export default function Orders() {
   const { orders, addToCart } = useCart();
   const router = useRouter();
   const reorder = (order: (typeof orders)[number]) => {
-    const available = order.items.filter((item) => products.some((product) => product.id === item.id));
-    const missing = order.items.length - available.length;
-    available.forEach((item) => {
-      const product = products.find((candidate) => candidate.id === item.id);
-      if (product) for (let i = 0; i < item.quantity; i += 1) addToCart(product);
-    });
-    if (missing) Alert.alert("Some items unavailable", `${missing} item${missing === 1 ? "" : "s"} could not be added.`);
-    router.push("/(tabs)/cart");
+    const plan = planReorder(order, products);
+    plan.lines.forEach(({ product, quantity }) => { for (let i = 0; i < quantity; i += 1) addToCart(product); });
+    const message = reorderMessage(plan);
+    if (message) Alert.alert(plan.lines.length ? "Reorder note" : "Nothing could be added", message);
+    if (plan.lines.length) router.push("/(tabs)/cart");
   };
   return <ScrollView style={styles.root} contentContainerStyle={styles.container}>
     <Text style={styles.title}>Orders</Text><Text style={styles.subtitle}>Your saved order history</Text>
