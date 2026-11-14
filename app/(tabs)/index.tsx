@@ -12,7 +12,10 @@ import {
 } from "react-native";
 import { PRODUCTS } from "../../data/products";
 import { theme } from "../../theme";
-import { Product, useCart } from "../cart/CartContext";
+import { STORE } from "../../config/store";
+import { useCart } from "../../context/CartContext";
+import type { Product } from "../../types/product";
+import ProductCard from "../../components/ProductCard";
 
 const popularItems: Product[] = PRODUCTS.slice(0, 4);
 
@@ -67,7 +70,7 @@ export default function Home() {
         <View style={{ flex: 1, paddingRight: 8 }}>
           <Text style={styles.heroChip}>• Local favourite</Text>
           <Text style={styles.heroTitle} numberOfLines={1}>
-            Awad Trading
+            {STORE.name}
           </Text>
           <Text
             style={styles.heroSubtitle}
@@ -98,11 +101,11 @@ export default function Home() {
         {/* Collage */}
         <View style={styles.heroCollage}>
           <Image
-            source={{ uri: "https://via.placeholder.com/60x60.png?text=Rice" }}
+            source={{ uri: PRODUCTS[0].image }}
             style={styles.heroImageSmall}
           />
           <Image
-            source={{ uri: "https://via.placeholder.com/60x60.png?text=Oil" }}
+            source={{ uri: PRODUCTS[6].image }}
             style={[styles.heroImageSmall, { marginTop: 6 }]}
           />
         </View>
@@ -128,7 +131,6 @@ export default function Home() {
           </TouchableOpacity>
         ) : (
           <View style={styles.voiceButton}>
-            <Ionicons name="mic" size={18} color={theme.colors.textPrimary} />
           </View>
         )}
       </View>
@@ -138,7 +140,6 @@ export default function Home() {
         <Text style={styles.sectionTitle}>
           {hasSearch ? "Search results" : "Deals for you"}
         </Text>
-        {!hasSearch && <Text style={styles.sectionAction}>View all</Text>}
       </View>
 
       {!hasSearch && (
@@ -164,9 +165,9 @@ export default function Home() {
               <Text style={styles.dealMeta}>{item.unit}</Text>
               <View style={styles.dealPriceRow}>
                 <Text style={styles.dealPrice}>₹{item.price}</Text>
-                <Text style={styles.dealMRP}>
-                  ₹{(item.price * 1.3).toFixed(0)}
-                </Text>
+                {item.mrp && item.mrp > item.price ? (
+                  <Text style={styles.dealMRP}>₹{item.mrp}</Text>
+                ) : null}
               </View>
             </TouchableOpacity>
           ))}
@@ -188,52 +189,17 @@ export default function Home() {
           {!hasSearch && (
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Popular picks</Text>
-              <Text style={styles.sectionAction}>See more</Text>
             </View>
           )}
 
           <View style={styles.grid}>
             {(hasSearch ? filtered : popularItems).map((item) => (
-              <View key={item.id} style={styles.card}>
-                <View style={styles.badge}>
-                  <Ionicons name="star" size={12} color="#FDE68A" />
-                  <Text style={styles.badgeText}>
-                    {hasSearch ? "Result" : "Bestseller"}
-                  </Text>
-                </View>
-
-                <View style={styles.cardImagePlaceholder}>
-                  <Ionicons
-                    name="basket"
-                    size={30}
-                    color={theme.colors.textPrimary}
-                  />
-                </View>
-
-                <Text style={styles.cardName} numberOfLines={2}>
-                  {item.name}
-                </Text>
-                <Text style={styles.cardMeta}>
-                  {item.unit} · Handpicked stock
-                </Text>
-
-                <View style={styles.cardBottomRow}>
-                  <View>
-                    <Text style={styles.cardPrice}>₹{item.price}</Text>
-                    <Text style={styles.cardSubPrice}>
-                      MRP ₹{(item.price * 1.2).toFixed(0)}
-                    </Text>
-                  </View>
-                  <TouchableOpacity
-                    style={styles.addButton}
-                    activeOpacity={0.9}
-                    onPress={() => addToCart(item)}
-                  >
-                    <Ionicons name="add" size={16} color="#022C22" />
-                    <Text style={styles.addButtonText}>Add</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+              <ProductCard
+                key={item.id}
+                product={item}
+                onAdd={() => addToCart(item)}
+                badgeText={hasSearch ? "Result" : "Bestseller"}
+              />
             ))}
           </View>
         </>

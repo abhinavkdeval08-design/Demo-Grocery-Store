@@ -1,4 +1,6 @@
-export const PRODUCTS: Product[]= [
+import type { Product } from "../types/product";
+
+export const PRODUCTS: Product[] = [
   {
     id: "rice_01",
     name: "Awad Basmati Rice",
@@ -6,7 +8,8 @@ export const PRODUCTS: Product[]= [
     price: 540,
     image:
       "https://images.pexels.com/photos/4110250/pexels-photo-4110250.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Staples",
+    category: "Staples",
+    mrp: 620,
   },
   {
     id: "rice_02",
@@ -15,7 +18,8 @@ export const PRODUCTS: Product[]= [
     price: 760,
     image:
       "https://images.pexels.com/photos/3730755/pexels-photo-3730755.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Staples",
+    category: "Staples",
+    mrp: 820,
   },
   {
     id: "atta_01",
@@ -24,7 +28,7 @@ export const PRODUCTS: Product[]= [
     price: 430,
     image:
       "https://images.pexels.com/photos/143133/pexels-photo-143133.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Staples",
+    category: "Staples",
   },
   {
     id: "atta_02",
@@ -33,7 +37,7 @@ export const PRODUCTS: Product[]= [
     price: 320,
     image:
       "https://images.pexels.com/photos/4198042/pexels-photo-4198042.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Staples",
+    category: "Staples",
   },
   {
     id: "dal_01",
@@ -42,7 +46,7 @@ export const PRODUCTS: Product[]= [
     price: 145,
     image:
       "https://images.pexels.com/photos/4198022/pexels-photo-4198022.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Staples",
+    category: "Staples",
   },
   {
     id: "dal_02",
@@ -51,7 +55,7 @@ export const PRODUCTS: Product[]= [
     price: 138,
     image:
       "https://images.pexels.com/photos/4198021/pexels-photo-4198021.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Staples",
+    category: "Staples",
   },
   {
     id: "oil_01",
@@ -60,7 +64,7 @@ export const PRODUCTS: Product[]= [
     price: 135,
     image:
       "https://images.pexels.com/photos/3735187/pexels-photo-3735187.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Daily use",
+    category: "Daily use",
   },
   {
     id: "oil_02",
@@ -69,7 +73,7 @@ export const PRODUCTS: Product[]= [
     price: 165,
     image:
       "https://images.pexels.com/photos/12866734/pexels-photo-12866734.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Daily use",
+    category: "Daily use",
   },
   {
     id: "sugar_01",
@@ -78,7 +82,7 @@ export const PRODUCTS: Product[]= [
     price: 46,
     image:
       "https://images.pexels.com/photos/7224932/pexels-photo-7224932.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Daily use",
+    category: "Daily use",
   },
   {
     id: "salt_01",
@@ -87,7 +91,7 @@ export const PRODUCTS: Product[]= [
     price: 22,
     image:
       "https://images.pexels.com/photos/4110000/pexels-photo-4110000.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Daily use",
+    category: "Daily use",
   },
   {
     id: "milk_01",
@@ -96,7 +100,7 @@ export const PRODUCTS: Product[]= [
     price: 32,
     image:
       "https://images.pexels.com/photos/5946650/pexels-photo-5946650.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Daily use",
+    category: "Daily use",
   },
   {
     id: "ghee_01",
@@ -105,7 +109,7 @@ export const PRODUCTS: Product[]= [
     price: 420,
     image:
       "https://images.pexels.com/photos/4110226/pexels-photo-4110226.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Daily use",
+    category: "Daily use",
   },
   {
     id: "biscuit_01",
@@ -114,7 +118,7 @@ export const PRODUCTS: Product[]= [
     price: 65,
     image:
       "https://images.pexels.com/photos/1028704/pexels-photo-1028704.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Snacks",
+    category: "Snacks",
   },
   {
     id: "namkeen_01",
@@ -123,7 +127,7 @@ export const PRODUCTS: Product[]= [
     price: 95,
     image:
       "https://images.pexels.com/photos/4198020/pexels-photo-4198020.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Snacks",
+    category: "Snacks",
   },
   {
     id: "tea_01",
@@ -132,7 +136,7 @@ export const PRODUCTS: Product[]= [
     price: 185,
     image:
       "https://images.pexels.com/photos/3738884/pexels-photo-3738884.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Daily use",
+    category: "Daily use",
   },
   {
     id: "coffee_01",
@@ -141,7 +145,7 @@ export const PRODUCTS: Product[]= [
     price: 240,
     image:
       "https://images.pexels.com/photos/4109995/pexels-photo-4109995.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Daily use",
+    category: "Daily use",
   },
   {
     id: "spice_01",
@@ -150,7 +154,7 @@ export const PRODUCTS: Product[]= [
     price: 42,
     image:
       "https://images.pexels.com/photos/1431330/pexels-photo-1431330.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Spices",
+    category: "Spices",
   },
   {
     id: "spice_02",
@@ -159,7 +163,7 @@ export const PRODUCTS: Product[]= [
     price: 52,
     image:
       "https://images.pexels.com/photos/4198023/pexels-photo-4198023.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Spices",
+    category: "Spices",
   },
   {
     id: "spice_03",
@@ -168,7 +172,7 @@ export const PRODUCTS: Product[]= [
     price: 68,
     image:
       "https://images.pexels.com/photos/4110227/pexels-photo-4110227.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Spices",
+    category: "Spices",
   },
   {
     id: "clean_01",
@@ -177,7 +181,7 @@ export const PRODUCTS: Product[]= [
     price: 85,
     image:
       "https://images.pexels.com/photos/4107282/pexels-photo-4107282.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Home care",
+    category: "Home care",
   },
   {
     id: "clean_02",
@@ -186,6 +190,6 @@ export const PRODUCTS: Product[]= [
     price: 135,
     image:
       "https://images.pexels.com/photos/4107281/pexels-photo-4107281.jpeg?auto=compress&cs=tinysrgb&w=600",
-    tag: "Home care",
+    category: "Home care",
   },
 ];

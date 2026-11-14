@@ -4,7 +4,7 @@ import { Tabs } from "expo-router";
 import React from "react";
 import { Animated, Text, View } from "react-native";
 import { theme } from "../../theme";
-import { useCart } from "../cart/CartContext";
+import { useCart } from "../../context/CartContext";
 
 function PillIcon({
   label,
@@ -27,7 +27,7 @@ function PillIcon({
       friction: 6,
       useNativeDriver: true,
     }).start();
-  }, [focused]);
+  }, [focused, scale]);
 
   const activeBg = "rgba(15,23,42,0.95)";
   const inactiveBg = "transparent";
