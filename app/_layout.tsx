@@ -4,7 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { Platform } from "react-native";
 import { theme } from "../theme";
-import { CartProvider } from "./cart/CartContext";
+import { CartProvider } from "../context/CartContext";
 
 export default function RootLayout() {
   return (
@@ -24,7 +24,6 @@ export default function RootLayout() {
           headerTitleStyle: {
             fontWeight: "700",
             fontSize: 18,
-            letterSpacing: 0.4,
           },
           headerShadowVisible: false,
           headerTransparent: true,

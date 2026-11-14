@@ -8,7 +8,6 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -16,9 +15,8 @@ import {
   View,
 } from "react-native";
 import { theme } from "../../theme";
-import { useCart } from "../cart/CartContext";
-
-const STORE_WHATSAPP_NUMBER = "916377596085";
+import { useCart } from "../../context/CartContext";
+import { STORE } from "../../config/store";
 
 export default function Cart() {
   const { items, totalItems, totalPrice, addToCart, removeFromCart, clearCart } =
@@ -54,7 +52,7 @@ export default function Cart() {
     }
 
     const parts = [
-      "🧺 Awad Trading - New order",
+      `🧺 ${STORE.name} - New order`,
       "",
       ...headerLines,
       headerLines.length ? "" : "",
@@ -83,7 +81,7 @@ export default function Cart() {
     }
 
     const msg = encodeURIComponent(buildWhatsAppMessage());
-    const phone = STORE_WHATSAPP_NUMBER;
+    const phone = STORE.whatsappNumber;
     const url = `https://wa.me/${phone}?text=${msg}`;
 
     const supported = await Linking.canOpenURL(url);
@@ -113,12 +111,13 @@ export default function Cart() {
           </Text>
 
           {!isEmpty && (
-            <ScrollView
+            <FlatList
+              data={items}
+              keyExtractor={(item) => item.id}
               style={{ marginTop: 8 }}
               showsVerticalScrollIndicator={false}
-            >
-              {/* Customer details */}
-              <View style={styles.addressCard}>
+              ListHeaderComponent={
+                <View style={styles.addressCard}>
                 <View style={styles.addressRow}>
                   <Ionicons name="person-circle-outline" size={20} color="#A5B4FC" />
                   <View style={{ flex: 1 }}>
@@ -146,22 +145,6 @@ export default function Cart() {
                       multiline
                     />
 
-                    {/* Saved address pills (future-ready) */}
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        flexWrap: "wrap",
-                        gap: 8,
-                        marginTop: 6,
-                      }}
-                    >
-                      <TouchableOpacity style={styles.addressPillPrimary}>
-                        <Text style={styles.addressPillTextPrimary}>Home</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity style={styles.addressPill}>
-                        <Text style={styles.addressPillText}>Work</Text>
-                      </TouchableOpacity>
-                    </View>
                   </View>
                 </View>
 
@@ -180,15 +163,10 @@ export default function Cart() {
                     multiline
                   />
                 </View>
-              </View>
-
-              {/* Items list */}
-              <FlatList
-                data={items}
-                keyExtractor={(item) => item.id}
-                style={{ marginTop: 12, maxHeight: 260 }}
-                ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
-                renderItem={({ item }) => (
+                </View>
+              }
+              ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
+              renderItem={({ item }) => (
                   <View style={styles.itemRow}>
                     <View style={{ flex: 1 }}>
                       <Text style={styles.itemName}>{item.name}</Text>
@@ -216,9 +194,9 @@ export default function Cart() {
                       </TouchableOpacity>
                     </View>
                   </View>
-                )}
-              />
-            </ScrollView>
+              )}
+              ListFooterComponent={<View style={{ height: 12 }} />}
+            />
           )}
 
           {isEmpty && (
@@ -228,7 +206,7 @@ export default function Cart() {
               </View>
               <Text style={styles.emptyTitle}>Cart feels a little light</Text>
               <Text style={styles.emptyText}>
-                Add fresh staples from Awad Trading and we will have them at your
+                Add fresh staples from {STORE.name} and we will have them at your
                 door in minutes.
               </Text>
 
@@ -276,7 +254,7 @@ export default function Cart() {
             <Text style={styles.totalLabel}>Items total</Text>
             <Text style={styles.totalValue}>₹{totalPrice.toFixed(2)}</Text>
             <Text style={styles.totalMeta}>
-              Delivery: {deliveryFee === 0 ? "Free" : `₹${deliveryFee.toFixed(2)}`}
+              Delivery: Free
             </Text>
           </View>
 

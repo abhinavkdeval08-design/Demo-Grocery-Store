@@ -1,19 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-
-const STORE_INFO = {
-  name: "Demo Grocery Store",
-  owner: "Mr. John",
-  phone: "+91 9000000000",
-  phone2:"+91 8000000000",
-  address:
-    "Sample Address, Kolkata, India",
-  timing: "Mon–Sat · 7:00 AM – 9:00 PM\nSunday · 8:00 AM – 2:00 PM",
-  delivery:
-    "Free delivery within 5 km radius.\nMinimum order · ₹500\nDelivery time · Same day or next morning.",
-  upi: "demo@upi",
-  established: "April 2024",
-};
+import { STORE } from "../../config/store";
 
 export default function Store() {
   return (
@@ -31,7 +18,7 @@ export default function Store() {
         </View>
 
         <View style={{ flex: 1 }}>
-          <Text style={styles.storeName}>{STORE_INFO.name}</Text>
+          <Text style={styles.storeName}>{STORE.name}</Text>
           <Text style={styles.storeTagline}>
             Your neighbourhood partner for everyday essentials.
           </Text>
@@ -43,7 +30,7 @@ export default function Store() {
             </View>
             <View style={styles.chip}>
               <Ionicons name="time" size={14} color="#FACC15" />
-              <Text style={styles.chipText}>Since {STORE_INFO.established}</Text>
+              <Text style={styles.chipText}>Since {STORE.established}</Text>
             </View>
           </View>
         </View>
@@ -68,7 +55,7 @@ export default function Store() {
           <Ionicons name="person-circle" size={20} color="#A5B4FC" />
           <Text style={styles.cardTitle}>Owner</Text>
         </View>
-        <Text style={styles.cardValue}>{STORE_INFO.owner}</Text>
+        <Text style={styles.cardValue}>{STORE.owner}</Text>
         <Text style={styles.cardHint}>Personally curating quality and prices.</Text>
       </View>
 
@@ -79,9 +66,9 @@ export default function Store() {
           <Text style={styles.cardTitle}>Contact</Text>
         </View>
         <Text style={styles.cardValueLabel}>Primary</Text>
-        <Text style={styles.cardValue}>{STORE_INFO.phone}</Text>
+        <Text style={styles.cardValue}>{STORE.phone}</Text>
         <Text style={[styles.cardValueLabel, { marginTop: 8 }]}>Alternate</Text>
-        <Text style={styles.cardValue}>{STORE_INFO.phone2}</Text>
+        <Text style={styles.cardValue}>{STORE.alternatePhone}</Text>
         <Text style={styles.cardHint}>
           Call or WhatsApp for urgent orders and bulk enquiries.
         </Text>
@@ -93,7 +80,7 @@ export default function Store() {
           <Ionicons name="location" size={20} color="#22C55E" />
           <Text style={styles.cardTitle}>Store address</Text>
         </View>
-        <Text style={styles.cardValue}>{STORE_INFO.address}</Text>
+        <Text style={styles.cardValue}>{STORE.address}</Text>
         <View style={styles.inlineTagRow}>
           <Ionicons name="navigate" size={12} color="#9CA3AF" />
           <Text style={styles.inlineTagText}>
@@ -108,7 +95,7 @@ export default function Store() {
           <Ionicons name="time" size={20} color="#FACC15" />
           <Text style={styles.cardTitle}>Store timings</Text>
         </View>
-        <Text style={styles.cardValue}>{STORE_INFO.timing}</Text>
+        <Text style={styles.cardValue}>{STORE.timings}</Text>
         <Text style={styles.cardHint}>
           Hours may extend on festive days and weekends.
         </Text>
@@ -120,7 +107,7 @@ export default function Store() {
           <Ionicons name="bicycle" size={20} color="#2DD4BF" />
           <Text style={styles.cardTitle}>Delivery details</Text>
         </View>
-        <Text style={styles.cardValue}>{STORE_INFO.delivery}</Text>
+        <Text style={styles.cardValue}>{STORE.delivery}</Text>
         <View style={styles.deliveryTagRow}>
           <View style={styles.deliveryTag}>
             <Ionicons name="checkmark-circle" size={12} color="#6EE7B7" />
@@ -138,7 +125,7 @@ export default function Store() {
           <Ionicons name="qr-code" size={20} color="#22C55E" />
           <Text style={styles.cardTitle}>UPI payments</Text>
         </View>
-        <Text style={styles.cardValue}>{STORE_INFO.upi}</Text>
+        <Text style={styles.cardValue}>{STORE.upiId}</Text>
         <Text style={styles.cardHint}>
           Secure digital payments accepted for all orders.
         </Text>
@@ -148,7 +135,7 @@ export default function Store() {
       <View style={styles.footerNote}>
         <Ionicons name="information-circle" size={16} color="#6B7280" />
         <Text style={styles.footerText}>
-          Store details are maintained by Grocery Store. For corrections, reach
+          Store details are maintained by {STORE.name}. For corrections, reach
           out on the contact numbers above.
         </Text>
       </View>
