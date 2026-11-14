@@ -1,22 +1,35 @@
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image } from "expo-image";
+import * as Haptics from "expo-haptics";
+import { useRouter } from "expo-router";
+import React, { useEffect } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { theme } from "../theme";
 import type { Product } from "../types/product";
+import { useCart } from "../context/CartContext";
 
 type Props = {
   product: Product;
-  onAdd: () => void;
+  onAdd?: () => void;
+  onPress?: () => void;
   horizontal?: boolean;
   badgeText?: string;
 };
 
 export default function ProductCard({ product, onAdd, horizontal = false, badgeText }: Props) {
+  const router = useRouter();
+  const { items, addToCart, removeFromCart } = useCart();
+  const quantity = items.find((item) => item.id === product.id)?.quantity ?? 0;
+  const scale = useSharedValue(1);
+  const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+  const openDetail = onPress ?? (() => router.push(`/product/${product.id}`));
+  useEffect(() => { scale.value = withSpring(quantity ? 1.02 : 1); }, [quantity, scale]);
   const discounted = product.mrp !== undefined && product.mrp > product.price;
   return (
-    <View style={[styles.card, horizontal && styles.horizontalCard]}>
+    <TouchableOpacity accessibilityLabel={`View ${product.name}`} activeOpacity={0.92} onPress={openDetail} style={[styles.card, horizontal && styles.horizontalCard]}>
       <View style={[styles.imageWrap, horizontal && styles.horizontalImage]}>
-        {product.image ? <Image source={{ uri: product.image }} style={styles.image} /> : <Ionicons name="basket" size={30} color={theme.colors.textPrimary} />}
+        {product.image ? <Image source={product.image} style={styles.image} contentFit="cover" placeholder={{ blurhash: "LEHV6nWB2yk8pyo0adR*.7kCMdnj" }} cachePolicy="memory-disk" /> : <Ionicons name="basket" size={30} color={theme.colors.textPrimary} />}
       </View>
       <View style={styles.content}>
         <View style={styles.titleRow}>
@@ -29,13 +42,20 @@ export default function ProductCard({ product, onAdd, horizontal = false, badgeT
             <Text style={styles.price}>₹{product.price}</Text>
             {discounted ? <Text style={styles.mrp}>MRP ₹{product.mrp}</Text> : null}
           </View>
-          <TouchableOpacity style={styles.addButton} onPress={onAdd} activeOpacity={0.9}>
-            <Ionicons name="add" size={16} color="#022C22" />
-            <Text style={styles.addText}>Add</Text>
-          </TouchableOpacity>
+          {product.inStock === false ? <Text style={styles.outOfStock}>Out of stock</Text> : (
+            <Animated.View style={animatedStyle}>
+              {quantity === 0 ? <TouchableOpacity accessibilityLabel={`Add ${product.name} to cart`} style={styles.addButton} onPress={() => { (onAdd ?? (() => addToCart(product)))(); Haptics.selectionAsync(); }} activeOpacity={0.9}>
+                <Ionicons name="add" size={16} color="#022C22" /><Text style={styles.addText}>ADD</Text>
+              </TouchableOpacity> : <View style={styles.stepper}>
+                <TouchableOpacity accessibilityLabel={`Remove one ${product.name}`} style={styles.stepButton} onPress={() => { removeFromCart(product.id); Haptics.selectionAsync(); }}><Ionicons name="remove" size={16} color={theme.colors.textPrimary} /></TouchableOpacity>
+                <Text style={styles.quantity}>{quantity}</Text>
+                <TouchableOpacity accessibilityLabel={`Add one ${product.name}`} style={styles.stepButton} onPress={() => { addToCart(product); Haptics.selectionAsync(); }}><Ionicons name="add" size={16} color={theme.colors.textPrimary} /></TouchableOpacity>
+              </View>}
+            </Animated.View>
+          )}
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -55,4 +75,8 @@ const styles = StyleSheet.create({
   mrp: { fontSize: 11, color: "#6B7280", textDecorationLine: "line-through" },
   addButton: { flexDirection: "row", alignItems: "center", paddingHorizontal: 10, paddingVertical: 6, borderRadius: 999, backgroundColor: theme.colors.accent, gap: 4 },
   addText: { fontSize: 12, fontWeight: "700", color: "#022C22" },
+  stepper: { flexDirection: "row", alignItems: "center", borderRadius: 999, backgroundColor: theme.colors.accent, minHeight: 34 },
+  stepButton: { width: 34, height: 34, alignItems: "center", justifyContent: "center" },
+  quantity: { minWidth: 18, textAlign: "center", fontSize: 13, fontWeight: "700", color: "#022C22" },
+  outOfStock: { fontSize: 11, color: "#FCA5A5", fontWeight: "600" },
 });

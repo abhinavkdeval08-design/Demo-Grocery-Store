@@ -1,22 +1,23 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
 import React from "react";
-import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FlatList, RefreshControl, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ProductCard from "../../components/ProductCard";
 import { PRODUCTS } from "../../data/products";
 import { STORE } from "../../config/store";
 import { theme } from "../../theme";
-import { useCart } from "../../context/CartContext";
+import { useProductSearch } from "../../hooks/useProductSearch";
+import CartBar from "../../components/CartBar";
 
 export default function Products() {
-  const { addToCart } = useCart();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ filter?: string }>();
   const categories = React.useMemo(() => ["All", ...new Set(PRODUCTS.map((item) => item.category))], []);
   const [activeFilter, setActiveFilter] = React.useState(params.filter && categories.includes(params.filter) ? params.filter : "All");
-  const [search, setSearch] = React.useState("");
+  const { query: search, setQuery: setSearch, results: searchedProducts } = useProductSearch(PRODUCTS);
   const [sort, setSort] = React.useState<"default" | "low" | "high" | "name">("default");
+  const [refreshing, setRefreshing] = React.useState(false);
 
   React.useEffect(() => {
     if (params.filter && categories.includes(params.filter)) setActiveFilter(params.filter);
@@ -26,12 +27,12 @@ export default function Products() {
     const query = search.trim().toLowerCase();
     const result = PRODUCTS.filter((product) =>
       (activeFilter === "All" || product.category === activeFilter) &&
-      (!query || `${product.name} ${product.unit ?? ""} ${product.category}`.toLowerCase().includes(query)),
+      (!query || searchedProducts.some((result) => result.id === product.id)),
     );
     return [...result].sort((a, b) =>
       sort === "low" ? a.price - b.price : sort === "high" ? b.price - a.price : sort === "name" ? a.name.localeCompare(b.name) : 0,
     );
-  }, [activeFilter, search, sort]);
+  }, [activeFilter, search, sort, searchedProducts]);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + 32 }]}>
@@ -41,7 +42,7 @@ export default function Products() {
       </View>
       <View style={styles.searchBox}>
         <Ionicons name="search" size={18} color={theme.colors.textSecondary} />
-        <TextInput value={search} onChangeText={setSearch} placeholder="Search products" placeholderTextColor="#6B7280" style={styles.search} />
+        <TextInput accessibilityLabel="Search products" value={search} onChangeText={setSearch} placeholder="Search products" placeholderTextColor="#6B7280" style={styles.search} />
       </View>
       <FlatList
         horizontal
@@ -58,10 +59,12 @@ export default function Products() {
         data={filteredProducts}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); setTimeout(() => setRefreshing(false), 500); }} tintColor={theme.colors.accent} />}
         ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-        renderItem={({ item }) => <ProductCard product={item} horizontal onAdd={() => addToCart(item)} />}
+        renderItem={({ item }) => <ProductCard product={item} horizontal />}
         ListEmptyComponent={<Text style={styles.empty}>No products found.</Text>}
       />
+      <CartBar />
     </View>
   );
 }
