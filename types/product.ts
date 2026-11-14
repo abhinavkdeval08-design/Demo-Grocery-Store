@@ -7,6 +7,8 @@ export type Product = {
   image?: string;
   category: string;
   inStock?: boolean;
+  description?: string;
+  unitOptions?: string[];
 };
 
 export type CartItem = Product & {
