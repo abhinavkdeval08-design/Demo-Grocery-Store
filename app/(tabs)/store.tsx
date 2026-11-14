@@ -1,9 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import { STORE } from "../../config/store";
 import { useCatalog } from "../../context/CatalogContext";
 
 export default function Store() {
+  const router = useRouter();
   const { lastUpdated, error } = useCatalog();
   const updatedText = lastUpdated ? `Prices last updated: ${new Date(lastUpdated).toLocaleString()}${error ? " (could not refresh)" : ""}` : "Prices: built-in list";
   return (
@@ -16,9 +18,11 @@ export default function Store() {
 
       {/* Header / Brand block */}
       <View style={styles.headerCard}>
-        <View style={styles.logoCircle}>
-          <Text style={styles.logoText}>A</Text>
-        </View>
+        <TouchableWithoutFeedback delayLongPress={1500} onLongPress={() => router.push("/owner")}>
+          <View style={styles.logoCircle} accessible={false}>
+            <Text style={styles.logoText}>A</Text>
+          </View>
+        </TouchableWithoutFeedback>
 
         <View style={{ flex: 1 }}>
           <Text style={styles.storeName}>{STORE.name}</Text>
