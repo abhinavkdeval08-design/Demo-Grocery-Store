@@ -5,9 +5,10 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { STORE } from "../../config/store";
-import { COUPONS, calculateDiscount, findCoupon } from "../../data/coupons";
+import { COUPONS, checkCoupon, findCoupon, calculateDiscount } from "../../data/coupons";
 import { useCart } from "../../context/CartContext";
 import { buildOrderMessage } from "../../utils/buildOrderMessage";
+import { getNextOrderId } from "../../utils/orderId";
 import type { Address, Order, PaymentMethod } from "../../types/product";
 import { theme } from "../../theme";
 
@@ -21,15 +22,21 @@ export default function Cart() {
   const [note, setNote] = React.useState("");
   const [couponCode, setCouponCode] = React.useState("");
   const [couponMessage, setCouponMessage] = React.useState("");
-  const [couponDiscount, setCouponDiscount] = React.useState(0);
+  const [appliedCode, setAppliedCode] = React.useState<string | null>(null);
   const [payment, setPayment] = React.useState<PaymentMethod>("cod");
   const [upiFallback, setUpiFallback] = React.useState(false);
+  const [pendingOrder, setPendingOrder] = React.useState<Order | null>(null);
+  const [busy, setBusy] = React.useState(false);
   const selected = addresses.find((address) => address.id === selectedId);
   React.useEffect(() => {
     if (!selectedId && addresses[0]) setSelectedId(addresses[0].id);
   }, [addresses, selectedId]);
   const subtotal = totalPrice;
   const deliveryFee = subtotal >= STORE.freeDeliveryAbove ? 0 : STORE.deliveryFee;
+  // The discount is always derived from the applied coupon and the current subtotal,
+  // so it can never go stale when the cart changes.
+  const appliedCoupon = appliedCode ? findCoupon(appliedCode) : undefined;
+  const couponDiscount = appliedCoupon ? calculateDiscount(appliedCoupon, subtotal) : 0;
   const grandTotal = Math.max(0, subtotal + deliveryFee - couponDiscount);
   const minimumMet = subtotal >= STORE.minOrder;
   const minimumProgress = Math.min(1, subtotal / STORE.minOrder);
@@ -49,29 +56,64 @@ export default function Cart() {
     saveAddress({ ...editing, phone: editing.phone.replace(/\D/g, "") });
     setSelectedId(editing.id); setEditing(null);
   };
+  // If the cart changes so that the applied coupon no longer applies, remove it.
+  React.useEffect(() => {
+    if (!appliedCode) return;
+    const result = checkCoupon(appliedCode, subtotal);
+    if (!result.ok) {
+      setAppliedCode(null);
+      setCouponMessage(`Coupon removed: ${result.message.charAt(0).toLowerCase()}${result.message.slice(1)}`);
+    }
+  }, [appliedCode, subtotal]);
+  // A pending UPI order is a snapshot of the cart; discard it when anything it depends on changes.
+  React.useEffect(() => { setPendingOrder(null); }, [items, couponDiscount, deliveryFee, payment, selectedId, note]);
   const applyCoupon = () => {
-    const coupon = findCoupon(couponCode);
-    if (!coupon) { setCouponDiscount(0); setCouponMessage("Invalid coupon code"); return; }
-    const discount = calculateDiscount(coupon, subtotal);
-    if (new Date(coupon.expiresAt).getTime() < Date.now()) { setCouponDiscount(0); setCouponMessage("Coupon expired"); return; }
-    if (coupon.minOrder && subtotal < coupon.minOrder) { setCouponDiscount(0); setCouponMessage(`Minimum order ₹${coupon.minOrder} required`); return; }
-    if (!discount) { setCouponDiscount(0); setCouponMessage("Coupon could not be applied"); return; }
-    setCouponDiscount(discount); setCouponMessage(`${coupon.code} applied: ₹${discount.toFixed(2)} off`);
+    const result = checkCoupon(couponCode, subtotal);
+    if (!result.ok) { setAppliedCode(null); setCouponMessage(result.message); return; }
+    setAppliedCode(result.coupon.code);
+    setCouponMessage(`${result.coupon.code} applied: ₹${result.discount.toFixed(2)} off`);
+  };
+  const confirmClearCart = () =>
+    Alert.alert("Clear cart?", "All items will be removed from your cart.", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Clear", style: "destructive", onPress: () => { clearCart(); setAppliedCode(null); setCouponMessage(""); } },
+    ]);
+  const buildOrder = async (): Promise<Order | null> => {
+    if (!items.length) return null;
+    if (!minimumMet) { Alert.alert("Minimum order", `Add ₹${(STORE.minOrder - subtotal).toFixed(2)} more to continue.`); return null; }
+    if (!selected) { Alert.alert("Add an address", "Choose or add a delivery address."); return null; }
+    const id = await getNextOrderId();
+    return { id, items, customer, address: selected, subtotal, deliveryFee, discount: couponDiscount, total: grandTotal, couponCode: couponDiscount ? appliedCode ?? undefined : undefined, paymentMethod: payment, status: "placed", note: note.trim() || undefined, createdAt: new Date().toISOString() };
+  };
+  // Sends the order to the store on WhatsApp. The order is saved and the cart cleared only if WhatsApp opened.
+  const sendOnWhatsApp = async (order: Order) => {
+    try {
+      await Linking.openURL(`https://wa.me/${STORE.whatsappNumber}?text=${encodeURIComponent(buildOrderMessage(order))}`);
+    } catch {
+      Alert.alert("WhatsApp unavailable", "Could not open WhatsApp. Please install it and try again. Your cart is unchanged.");
+      return;
+    }
+    saveOrder(order); clearCart(); setNote(""); setAppliedCode(null); setCouponMessage(""); setPendingOrder(null); setUpiFallback(false);
+    router.push("/(tabs)/orders");
   };
   const checkout = async () => {
-    if (!items.length) return;
-    if (!minimumMet) return Alert.alert("Minimum order", `Add ₹${(STORE.minOrder - subtotal).toFixed(2)} more to continue.`);
-    if (!selected) return Alert.alert("Add an address", "Choose or add a delivery address.");
-    const date = new Date();
-    const order: Order = { id: `AT-${date.toISOString().slice(0, 10).replace(/-/g, "")}-${Date.now().toString().slice(-4)}`, items, customer, address: selected, subtotal, deliveryFee, discount: couponDiscount, total: grandTotal, couponCode: couponDiscount ? couponCode.trim().toUpperCase() : undefined, paymentMethod: payment, status: "placed", note: note.trim() || undefined, createdAt: date.toISOString() };
-    if (payment === "upi") {
-      const upiUrl = `upi://pay?pa=${STORE.upiId}&pn=${encodeURIComponent(STORE.name)}&am=${grandTotal.toFixed(2)}&cu=INR&tn=${encodeURIComponent(order.id)}`;
-      if (await Linking.canOpenURL(upiUrl)) await Linking.openURL(upiUrl);
-      else setUpiFallback(true);
+    if (busy) return;
+    setBusy(true);
+    try {
+      const order = await buildOrder();
+      if (!order) return;
+      if (order.paymentMethod === "cod") { await sendOnWhatsApp(order); return; }
+      // UPI: open the UPI app first and wait for the customer to confirm the payment.
+      setPendingOrder(order);
+      setUpiFallback(false);
+      try {
+        await Linking.openURL(`upi://pay?pa=${encodeURIComponent(STORE.upiId)}&pn=${encodeURIComponent(STORE.name)}&am=${order.total.toFixed(2)}&cu=INR&tn=${encodeURIComponent(order.id)}`);
+      } catch {
+        setUpiFallback(true);
+      }
+    } finally {
+      setBusy(false);
     }
-    const url = `https://wa.me/${STORE.whatsappNumber}?text=${encodeURIComponent(buildOrderMessage(order))}`;
-    if (!(await Linking.canOpenURL(url))) return Alert.alert("WhatsApp unavailable", "Please install WhatsApp to complete your order.");
-    await Linking.openURL(url); saveOrder(order); clearCart(); setNote(""); router.push("/(tabs)/orders");
   };
   return <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === "ios" ? "padding" : undefined}>
     <ScrollView contentContainerStyle={styles.container}>
@@ -86,7 +128,7 @@ export default function Cart() {
         <Text style={styles.section}>Payment</Text><View style={styles.row}><TouchableOpacity style={[styles.payment, payment === "cod" && styles.pillSelected]} onPress={() => setPayment("cod")}><Text style={styles.pillText}>Cash on delivery</Text></TouchableOpacity><TouchableOpacity style={[styles.payment, payment === "upi" && styles.pillSelected]} onPress={() => setPayment("upi")}><Text style={styles.pillText}>UPI · {STORE.upiId}</Text></TouchableOpacity></View>{upiFallback && <View style={styles.upiFallback}><Text style={styles.muted}>No UPI app found. Pay using this UPI ID:</Text><Text style={styles.upiId}>{STORE.upiId}</Text><TouchableOpacity style={styles.outline} onPress={() => Clipboard.setStringAsync(STORE.upiId)}><Text style={styles.accent}>Copy UPI ID</Text></TouchableOpacity></View>}<TextInput style={styles.input} placeholder="Order note (optional)" placeholderTextColor="#6B7280" value={note} onChangeText={setNote} />
       </>}
     </ScrollView>
-    {items.length > 0 && <View style={styles.footer}><View style={styles.row}><Text style={styles.muted}>Subtotal</Text><Text style={styles.muted}>₹{subtotal.toFixed(2)}</Text></View><View style={styles.row}><Text style={styles.muted}>Delivery</Text><Text style={styles.muted}>₹{deliveryFee.toFixed(2)}</Text></View>{couponDiscount > 0 && <View style={styles.row}><Text style={styles.muted}>Discount</Text><Text style={styles.muted}>-₹{couponDiscount.toFixed(2)}</Text></View>}<View style={styles.row}><Text style={styles.muted}>Total</Text><Text style={styles.total}>₹{grandTotal.toFixed(2)}</Text></View><TouchableOpacity disabled={!minimumMet} style={[styles.button, !minimumMet && { opacity: .45 }]} onPress={checkout}><Ionicons name="logo-whatsapp" size={18} color="#022C22" /><Text style={styles.buttonText}>{minimumMet ? "Place order on WhatsApp" : `Add ₹${(STORE.minOrder - subtotal).toFixed(0)} more`}</Text></TouchableOpacity></View>}
+    {items.length > 0 && <View style={styles.footer}><View style={styles.row}><Text style={styles.muted}>Subtotal</Text><Text style={styles.muted}>₹{subtotal.toFixed(2)}</Text></View><View style={styles.row}><Text style={styles.muted}>Delivery</Text><Text style={styles.muted}>₹{deliveryFee.toFixed(2)}</Text></View>{couponDiscount > 0 && <View style={styles.row}><Text style={styles.muted}>Discount</Text><Text style={styles.muted}>-₹{couponDiscount.toFixed(2)}</Text></View>}<View style={styles.row}><Text style={styles.muted}>Total</Text><Text style={styles.total}>₹{grandTotal.toFixed(2)}</Text></View>{pendingOrder ? <><TouchableOpacity accessibilityLabel="Confirm UPI payment and send order on WhatsApp" style={styles.button} onPress={() => sendOnWhatsApp(pendingOrder)}><Ionicons name="logo-whatsapp" size={18} color="#022C22" /><Text style={styles.buttonText}>I&apos;ve paid - send order on WhatsApp</Text></TouchableOpacity><TouchableOpacity onPress={() => setPendingOrder(null)}><Text style={[styles.muted, { textAlign: "center" }]}>Cancel payment</Text></TouchableOpacity></> : <TouchableOpacity disabled={!minimumMet || busy} style={[styles.button, (!minimumMet || busy) && { opacity: .45 }]} onPress={checkout}><Ionicons name={payment === "upi" ? "wallet-outline" : "logo-whatsapp"} size={18} color="#022C22" /><Text style={styles.buttonText}>{!minimumMet ? `Add ₹${(STORE.minOrder - subtotal).toFixed(0)} more` : payment === "upi" ? `Pay ₹${grandTotal.toFixed(2)} via UPI` : "Place order on WhatsApp"}</Text></TouchableOpacity>}<TouchableOpacity accessibilityLabel="Clear cart" onPress={confirmClearCart}><Text style={[styles.muted, { textAlign: "center" }]}>Clear cart</Text></TouchableOpacity></View>}
   </KeyboardAvoidingView>;
 }
 const styles = StyleSheet.create({ root: { flex: 1, backgroundColor: theme.colors.background }, container: { padding: 20, paddingTop: 64, paddingBottom: 170 }, title: { color: theme.colors.textPrimary, fontSize: 24, fontWeight: "700" }, subtitle: { color: theme.colors.textSecondary, marginTop: 4, marginBottom: 16 }, progress: { backgroundColor: theme.colors.surface, borderRadius: 16, padding: 12, marginBottom: 10, gap: 8 }, track: { height: 7, backgroundColor: "#1E293B", borderRadius: 9 }, fill: { height: 7, backgroundColor: theme.colors.accent, borderRadius: 9 }, muted: { color: theme.colors.textSecondary, fontSize: 12 }, error: { color: "#FCA5A5", fontSize: 12, marginBottom: 8 }, item: { flexDirection: "row", alignItems: "center", paddingVertical: 13, borderBottomWidth: 1, borderBottomColor: theme.colors.borderStrong }, itemName: { color: theme.colors.textPrimary, fontWeight: "600", marginBottom: 4 }, qty: { flexDirection: "row", alignItems: "center", gap: 12, backgroundColor: theme.colors.surface, padding: 7, borderRadius: 18 }, qtyText: { color: theme.colors.textPrimary }, section: { color: theme.colors.textPrimary, fontSize: 15, fontWeight: "600", marginTop: 18, marginBottom: 9 }, pill: { flexDirection: "row", alignItems: "center", gap: 8, padding: 10, borderRadius: 20, borderWidth: 1, borderColor: theme.colors.borderStrong }, pillSelected: { borderColor: theme.colors.accent, backgroundColor: "rgba(34,197,94,.12)" }, pillText: { color: theme.colors.textPrimary, fontSize: 12 }, accent: { color: theme.colors.accent, fontWeight: "600" }, editor: { backgroundColor: theme.colors.surface, borderRadius: 16, padding: 12 }, upiFallback: { backgroundColor: theme.colors.surface, borderRadius: 12, padding: 12, gap: 8, marginTop: 8 }, upiId: { color: theme.colors.textPrimary, fontWeight: "700" }, input: { color: theme.colors.textPrimary, backgroundColor: "#020617", borderColor: theme.colors.borderStrong, borderWidth: 1, borderRadius: 10, padding: 11, marginBottom: 8 }, row: { flexDirection: "row", alignItems: "center", gap: 8 }, outline: { borderWidth: 1, borderColor: theme.colors.accent, borderRadius: 20, paddingHorizontal: 13, paddingVertical: 9 }, button: { flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 8, backgroundColor: theme.colors.accent, borderRadius: 22, padding: 13 }, buttonText: { color: "#022C22", fontWeight: "700" }, payment: { flex: 1, padding: 11, borderRadius: 12, borderWidth: 1, borderColor: theme.colors.borderStrong }, empty: { alignItems: "center", gap: 14, paddingTop: 100 }, emptyTitle: { color: theme.colors.textPrimary, fontSize: 17 }, footer: { padding: 16, gap: 10, backgroundColor: theme.colors.surface, borderTopWidth: 1, borderTopColor: theme.colors.borderStrong }, total: { color: theme.colors.textPrimary, fontSize: 20, fontWeight: "700" } });
