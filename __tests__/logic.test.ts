@@ -110,3 +110,12 @@ describe("buildOrderMessage", () => {
     expect(text).toContain("Discount: ₹50.00");
   });
 });
+
+describe("buildOrderMessage pincode and slot", () => {
+  it("includes pincode and slot when present", () => {
+    const o = { id: "X", items: [{ id: "a", name: "Rice", price: 10, category: "c", quantity: 1 }], customer: { name: "", phone: "", addresses: [] }, address: { id: "1", label: "Home", name: "R", phone: "9", address: "addr", pincode: "700001" }, subtotal: 10, deliveryFee: 0, discount: 0, total: 10, paymentMethod: "cod", status: "placed", slot: { date: "2026-11-15", slotId: "m", label: "Tomorrow, Morning" }, createdAt: "2026-11-14T00:00:00Z" } as Order;
+    const text = buildOrderMessage(o);
+    expect(text).toContain("Pincode: 700001");
+    expect(text).toContain("Delivery slot: Tomorrow, Morning (2026-11-15)");
+  });
+});

@@ -21,6 +21,7 @@ export type Address = {
   name: string;
   phone: string;
   address: string;
+  pincode?: string;
 };
 
 export type Customer = {
@@ -44,6 +45,7 @@ export type Order = {
   paymentMethod: PaymentMethod;
   status: "placed" | "pending";
   note?: string;
+  slot?: { date: string; label: string; slotId: string };
   createdAt: string;
 };
 

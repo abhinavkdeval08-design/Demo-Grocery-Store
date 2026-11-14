@@ -10,6 +10,8 @@ export function buildOrderMessage(order: Order): string {
     `Name: ${order.address.name}`,
     `Phone: ${order.address.phone}`,
     `Address: ${order.address.address}`,
+    ...(order.address.pincode ? [`Pincode: ${order.address.pincode}`] : []),
+    ...(order.slot ? [`Delivery slot: ${order.slot.label} (${order.slot.date})`] : []),
     "",
     ...lines,
     "",
