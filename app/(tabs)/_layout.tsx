@@ -163,6 +163,17 @@ export default function TabLayout() {
               focused={focused}
               badgeCount={totalItems}
             />
+
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="orders"
+        options={{
+          title: "Orders",
+          tabBarIcon: ({ color, focused }) => (
+            <PillIcon label="Orders" icon="receipt" color={color} focused={focused} />
           ),
         }}
       />
