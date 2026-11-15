@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { useT } from "../../i18n";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import React from "react";
@@ -10,12 +11,13 @@ import { useCart } from "../../context/CartContext";
 import { theme } from "../../theme";
 
 export default function ProductDetail() {
+  const { t } = useT();
   const { products } = useCatalog();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const product = products.find((item) => item.id === id);
   const { items, addToCart, removeFromCart } = useCart();
-  if (!product) return <View style={styles.center}><Text style={styles.title}>Product not found</Text></View>;
+  if (!product) return <View style={styles.center}><Text style={styles.title}>{t("pd.notfound")}</Text></View>;
   const quantity = items.find((item) => item.id === product.id)?.quantity ?? 0;
   return <View style={styles.container}>
     <Stack.Screen options={{ presentation: "modal" }} />
@@ -25,11 +27,11 @@ export default function ProductDetail() {
       <Text style={styles.category}>{product.category}</Text><Text style={styles.title}>{product.name}</Text><Text style={styles.unit}>{product.unit}</Text>
       <View style={styles.priceRow}><Text style={styles.price}>₹{product.price}</Text>{product.mrp ? <Text style={styles.mrp}>MRP ₹{product.mrp}</Text> : null}</View>
       <Text style={styles.description}>{product.description ?? `Quality ${product.name.toLowerCase()} selected for everyday cooking and value.`}</Text>
-      {product.inStock === false ? <Text style={styles.out}>Currently out of stock</Text> : <View style={styles.actionRow}>
+      {product.inStock === false ? <Text style={styles.out}>{t("pd.oos")}</Text> : <View style={styles.actionRow}>
         {quantity > 0 && <View style={styles.stepper}><TouchableOpacity accessibilityLabel="Remove item" onPress={() => { removeFromCart(product.id); Haptics.selectionAsync(); }}><Ionicons name="remove" size={20} color={theme.colors.textPrimary} /></TouchableOpacity><Text style={styles.quantity}>{quantity}</Text><TouchableOpacity accessibilityLabel="Add item" onPress={() => { addToCart(product); Haptics.selectionAsync(); }}><Ionicons name="add" size={20} color={theme.colors.textPrimary} /></TouchableOpacity></View>}
-        <TouchableOpacity accessibilityLabel={`Add ${product.name} to cart`} style={styles.add} onPress={() => { addToCart(product); Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success); }}><Text style={styles.addText}>{quantity ? "Add one more" : "Add to cart"}</Text></TouchableOpacity>
+        <TouchableOpacity accessibilityLabel={`Add ${product.name} to cart`} style={styles.add} onPress={() => { addToCart(product); Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success); }}><Text style={styles.addText}>{quantity ? t("pd.more") : t("pd.add")}</Text></TouchableOpacity>
       </View>}
-      <Text style={styles.section}>You might also like</Text>
+      <Text style={styles.section}>{t("pd.related")}</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.related}>{products.filter((item) => item.category === product.category && item.id !== product.id).slice(0, 4).map((item) => <View key={item.id} style={styles.relatedCard}><ProductCard product={item} /></View>)}</ScrollView>
     </ScrollView>
   </View>;

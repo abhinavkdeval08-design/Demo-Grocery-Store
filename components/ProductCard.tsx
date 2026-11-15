@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { useT } from "../i18n";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import React, { useEffect } from "react";
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export default function ProductCard({ product, onAdd, onPress, horizontal = false, badgeText }: Props) {
+  const { t } = useT();
   const router = useRouter();
   const { items, addToCart, removeFromCart } = useCart();
   const quantity = items.find((item) => item.id === product.id)?.quantity ?? 0;
@@ -42,10 +44,10 @@ export default function ProductCard({ product, onAdd, onPress, horizontal = fals
             <Text style={styles.price}>₹{product.price}</Text>
             {discounted ? <Text style={styles.mrp}>MRP ₹{product.mrp}</Text> : null}
           </View>
-          {product.inStock === false ? <Text style={styles.outOfStock}>Out of stock</Text> : (
+          {product.inStock === false ? <Text style={styles.outOfStock}>{t("product.outOfStock")}</Text> : (
             <Animated.View style={animatedStyle}>
               {quantity === 0 ? <TouchableOpacity accessibilityLabel={`Add ${product.name} to cart`} style={styles.addButton} onPress={() => { (onAdd ?? (() => addToCart(product)))(); Haptics.selectionAsync(); }} activeOpacity={0.9}>
-                <Ionicons name="add" size={16} color="#022C22" /><Text style={styles.addText}>ADD</Text>
+                <Ionicons name="add" size={16} color="#022C22" /><Text style={styles.addText}>{t("product.add")}</Text>
               </TouchableOpacity> : <View style={styles.stepper}>
                 <TouchableOpacity accessibilityLabel={`Remove one ${product.name}`} style={styles.stepButton} onPress={() => { removeFromCart(product.id); Haptics.selectionAsync(); }}><Ionicons name="remove" size={16} color={theme.colors.textPrimary} /></TouchableOpacity>
                 <Text style={styles.quantity}>{quantity}</Text>

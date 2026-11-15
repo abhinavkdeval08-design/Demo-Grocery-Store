@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useT } from "../i18n";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
@@ -8,13 +9,14 @@ import { STORE } from "../config/store";
 import { theme } from "../theme";
 
 export default function CartBar() {
+  const { t, items: itemsLabel } = useT();
   const { totalItems, totalPrice } = useCart();
   const router = useRouter();
   if (!totalItems) return null;
   return <Animated.View entering={SlideInDown.duration(220)} exiting={SlideOutDown.duration(180)} style={styles.wrap}>
     <TouchableOpacity accessibilityLabel="View cart" style={styles.button} onPress={() => router.push("/(tabs)/cart")}>
-      <Text style={styles.summary}>{totalItems} item{totalItems === 1 ? "" : "s"} · ₹{totalPrice}</Text>
-      <Text style={styles.promise}>Delivery in {STORE.deliveryPromise}</Text>
+      <Text style={styles.summary}>{itemsLabel(totalItems)} · ₹{totalPrice}</Text>
+      <Text style={styles.promise}>{t("cartbar.delivery", { time: STORE.deliveryPromise })}</Text>
       <Ionicons name="arrow-forward" size={20} color="#022C22" />
     </TouchableOpacity>
   </Animated.View>;

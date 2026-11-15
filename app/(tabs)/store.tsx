@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useT } from "../../i18n";
 import { ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import { STORE } from "../../config/store";
 import { useCatalog } from "../../context/CatalogContext";
@@ -7,7 +8,8 @@ import { useCatalog } from "../../context/CatalogContext";
 export default function Store() {
   const router = useRouter();
   const { lastUpdated, error } = useCatalog();
-  const updatedText = lastUpdated ? `Prices last updated: ${new Date(lastUpdated).toLocaleString()}${error ? " (could not refresh)" : ""}` : "Prices: built-in list";
+  const { t, lang, setLang } = useT();
+  const updatedText = lastUpdated ? `${t("st.updated", { date: new Date(lastUpdated).toLocaleString() })}${error ? t("st.updatedFail") : ""}` : t("st.builtin");
   return (
     <ScrollView
       style={styles.container}
@@ -33,7 +35,7 @@ export default function Store() {
           <View style={styles.chipRow}>
             <View style={styles.chipPrimary}>
               <Ionicons name="checkmark-circle" size={14} color="#BBF7D0" />
-              <Text style={styles.chipTextPrimary}>Trusted local store</Text>
+              <Text style={styles.chipTextPrimary}>{t("st.trusted")}</Text>
             </View>
             <View style={styles.chip}>
               <Ionicons name="time" size={14} color="#FACC15" />
@@ -41,6 +43,13 @@ export default function Store() {
             </View>
           </View>
         </View>
+      </View>
+
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginHorizontal: 16, marginTop: 12 }}>
+        <Text style={{ color: "#9CA3AF", fontSize: 12 }}>{t("st.lang")}</Text>
+        {(["en", "hi"] as const).map((code) => (
+          <Text key={code} accessibilityRole="button" accessibilityLabel={code === "en" ? "English" : "हिन्दी"} onPress={() => setLang(code)} style={{ color: lang === code ? "#22C55E" : "#E5E7EB", borderColor: lang === code ? "#22C55E" : "#374151", borderWidth: 1, borderRadius: 16, paddingHorizontal: 12, paddingVertical: 6, fontSize: 13 }}>{code === "en" ? "English" : "हिन्दी"}</Text>
+        ))}
       </View>
 
       {/* Quick meta row */}
@@ -60,7 +69,7 @@ export default function Store() {
       <View style={styles.card}>
         <View style={styles.cardHeader}>
           <Ionicons name="person-circle" size={20} color="#A5B4FC" />
-          <Text style={styles.cardTitle}>Owner</Text>
+          <Text style={styles.cardTitle}>{t("st.owner")}</Text>
         </View>
         <Text style={styles.cardValue}>{STORE.owner}</Text>
         <Text style={styles.cardHint}>Personally curating quality and prices.</Text>
@@ -70,11 +79,11 @@ export default function Store() {
       <View style={styles.card}>
         <View style={styles.cardHeader}>
           <Ionicons name="call" size={20} color="#F97316" />
-          <Text style={styles.cardTitle}>Contact</Text>
+          <Text style={styles.cardTitle}>{t("st.contact")}</Text>
         </View>
-        <Text style={styles.cardValueLabel}>Primary</Text>
+        <Text style={styles.cardValueLabel}>{t("st.primary")}</Text>
         <Text style={styles.cardValue}>{STORE.phone}</Text>
-        <Text style={[styles.cardValueLabel, { marginTop: 8 }]}>Alternate</Text>
+        <Text style={[styles.cardValueLabel, { marginTop: 8 }]}>{t("st.alternate")}</Text>
         <Text style={styles.cardValue}>{STORE.alternatePhone}</Text>
         <Text style={styles.cardHint}>
           Call or WhatsApp for urgent orders and bulk enquiries.
@@ -85,7 +94,7 @@ export default function Store() {
       <View style={styles.card}>
         <View style={styles.cardHeader}>
           <Ionicons name="location" size={20} color="#22C55E" />
-          <Text style={styles.cardTitle}>Store address</Text>
+          <Text style={styles.cardTitle}>{t("st.address")}</Text>
         </View>
         <Text style={styles.cardValue}>{STORE.address}</Text>
         <View style={styles.inlineTagRow}>
@@ -100,7 +109,7 @@ export default function Store() {
       <View style={styles.card}>
         <View style={styles.cardHeader}>
           <Ionicons name="time" size={20} color="#FACC15" />
-          <Text style={styles.cardTitle}>Store timings</Text>
+          <Text style={styles.cardTitle}>{t("st.timings")}</Text>
         </View>
         <Text style={styles.cardValue}>{STORE.timings}</Text>
         <Text style={styles.cardHint}>
@@ -112,7 +121,7 @@ export default function Store() {
       <View style={styles.card}>
         <View style={styles.cardHeader}>
           <Ionicons name="bicycle" size={20} color="#2DD4BF" />
-          <Text style={styles.cardTitle}>Delivery details</Text>
+          <Text style={styles.cardTitle}>{t("st.delivery")}</Text>
         </View>
         <Text style={styles.cardValue}>{STORE.delivery}</Text>
         <Text style={styles.cardValue}>{updatedText}</Text>
