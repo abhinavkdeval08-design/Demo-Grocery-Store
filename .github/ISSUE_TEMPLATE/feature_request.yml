@@ -1,0 +1,14 @@
+name: Feature request
+description: Suggest an improvement for the store or the owner
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes: { label: What problem does this solve?, description: Who benefits (customer or shop owner)? }
+    validations: { required: true }
+  - type: textarea
+    id: idea
+    attributes: { label: Proposed solution }
+  - type: textarea
+    id: done
+    attributes: { label: How will we know it works?, description: Acceptance criteria }

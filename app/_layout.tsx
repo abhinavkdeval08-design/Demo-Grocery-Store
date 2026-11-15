@@ -1,5 +1,6 @@
 // app/_layout.tsx
 import { Stack } from "expo-router";
+import ErrorBoundary from "../components/ErrorBoundary";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { Platform } from "react-native";
@@ -11,6 +12,7 @@ import { KhataProvider } from "../context/KhataContext";
 
 export default function RootLayout() {
   return (
+    <ErrorBoundary>
     <LanguageProvider>
     <CartProvider>
       <CatalogProvider>
@@ -55,5 +57,6 @@ export default function RootLayout() {
       </CatalogProvider>
     </CartProvider>
     </LanguageProvider>
+    </ErrorBoundary>
   );
 }

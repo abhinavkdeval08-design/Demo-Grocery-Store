@@ -10,7 +10,8 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -58,6 +59,12 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/.expo/"
+    ],
+    "collectCoverageFrom": [
+      "utils/**/*.ts",
+      "services/**/*.ts",
+      "i18n/**/*.ts",
+      "data/coupons.ts"
     ]
   }
 }

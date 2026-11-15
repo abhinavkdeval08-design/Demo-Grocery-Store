@@ -49,9 +49,9 @@ export default function ProductCard({ product, onAdd, onPress, horizontal = fals
               {quantity === 0 ? <TouchableOpacity accessibilityLabel={`Add ${product.name} to cart`} style={styles.addButton} onPress={() => { (onAdd ?? (() => addToCart(product)))(); Haptics.selectionAsync(); }} activeOpacity={0.9}>
                 <Ionicons name="add" size={16} color="#022C22" /><Text style={styles.addText}>{t("product.add")}</Text>
               </TouchableOpacity> : <View style={styles.stepper}>
-                <TouchableOpacity accessibilityLabel={`Remove one ${product.name}`} style={styles.stepButton} onPress={() => { removeFromCart(product.id); Haptics.selectionAsync(); }}><Ionicons name="remove" size={16} color={theme.colors.textPrimary} /></TouchableOpacity>
+                <TouchableOpacity accessibilityLabel={`Remove one ${product.name}`} hitSlop={{ top: 6, bottom: 6, left: 4, right: 4 }} style={styles.stepButton} onPress={() => { removeFromCart(product.id); Haptics.selectionAsync(); }}><Ionicons name="remove" size={16} color={theme.colors.textPrimary} /></TouchableOpacity>
                 <Text style={styles.quantity}>{quantity}</Text>
-                <TouchableOpacity accessibilityLabel={`Add one ${product.name}`} style={styles.stepButton} onPress={() => { addToCart(product); Haptics.selectionAsync(); }}><Ionicons name="add" size={16} color={theme.colors.textPrimary} /></TouchableOpacity>
+                <TouchableOpacity accessibilityLabel={`Add one ${product.name}`} hitSlop={{ top: 6, bottom: 6, left: 4, right: 4 }} style={styles.stepButton} onPress={() => { addToCart(product); Haptics.selectionAsync(); }}><Ionicons name="add" size={16} color={theme.colors.textPrimary} /></TouchableOpacity>
               </View>}
             </Animated.View>
           )}
@@ -72,13 +72,13 @@ const styles = StyleSheet.create({
   name: { flex: 1, fontSize: 13, fontWeight: "600", color: theme.colors.textPrimary, marginBottom: 4 },
   badge: { fontSize: 10, color: theme.colors.accent },
   meta: { fontSize: 11, color: theme.colors.textSecondary, marginBottom: 10 },
-  priceRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+  priceRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 6 },
   price: { fontSize: 16, fontWeight: "700", color: theme.colors.accent },
   mrp: { fontSize: 11, color: "#6B7280", textDecorationLine: "line-through" },
   addButton: { minHeight: 44, flexDirection: "row", alignItems: "center", paddingHorizontal: 10, borderRadius: 999, backgroundColor: theme.colors.accent, gap: 4 },
   addText: { fontSize: 12, fontWeight: "700", color: "#022C22" },
   stepper: { flexDirection: "row", alignItems: "center", borderRadius: 999, backgroundColor: theme.colors.accent, minHeight: 34 },
-  stepButton: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
+  stepButton: { width: 34, height: 34, alignItems: "center", justifyContent: "center" },
   quantity: { minWidth: 18, textAlign: "center", fontSize: 13, fontWeight: "700", color: "#022C22" },
   outOfStock: { fontSize: 11, color: "#FCA5A5", fontWeight: "600" },
 });
