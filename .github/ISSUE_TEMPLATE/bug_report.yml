@@ -1,0 +1,17 @@
+name: Bug report
+description: Something is broken or looks wrong
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes: { label: What happened?, description: What did you expect instead? }
+    validations: { required: true }
+  - type: textarea
+    id: steps
+    attributes: { label: Steps to reproduce, placeholder: "1. Add an item\n2. Open the cart\n3. ..." }
+  - type: input
+    id: device
+    attributes: { label: Device and OS, placeholder: "Redmi Note 11, Android 13" }
+  - type: textarea
+    id: shots
+    attributes: { label: Screenshots or screen recording }

@@ -52,7 +52,7 @@ function PillIcon({
     >
       <View>
         <Ionicons name={icon} size={22} color={iconColor} />
-        {badgeCount && badgeCount > 0 && (
+        {!!badgeCount && badgeCount > 0 && (
           <View
             style={{
               position: "absolute",
@@ -116,6 +116,9 @@ export default function TabLayout() {
         },
         tabBarActiveTintColor: theme.colors.accent,
         tabBarInactiveTintColor: "#6B7280",
+        // The focused tab already shows its name inside the pill, so only unfocused tabs get a label.
+        tabBarLabel: ({ focused, color, children }) =>
+          focused ? null : <Text style={{ color, fontSize: 11, fontWeight: "600", letterSpacing: 0.3 }}>{children}</Text>,
         tabBarLabelStyle: {
           fontSize: 11,
           fontWeight: "600",

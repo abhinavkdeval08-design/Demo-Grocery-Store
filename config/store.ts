@@ -1,12 +1,13 @@
 export const STORE = {
   name: "Awad Trading",
   owner: "Mr. John",
-  whatsappNumber: "916377596085",
+  /** Override with EXPO_PUBLIC_WHATSAPP_NUMBER (country code + number, digits only). See .env.example */
+  whatsappNumber: process.env.EXPO_PUBLIC_WHATSAPP_NUMBER ?? "916377596085",
   phone: "+91 9000000000",
   alternatePhone: "+91 8000000000",
-  upiId: "demo@upi",
+  upiId: process.env.EXPO_PUBLIC_UPI_ID ?? "demo@upi",
   /** Published Google Sheet CSV link or JSON file URL. Leave empty to use the bundled data/products.ts. See docs/OWNER_GUIDE.md. */
-  catalogUrl: "",
+  catalogUrl: process.env.EXPO_PUBLIC_CATALOG_URL ?? "",
   address: "Sample Address, Kolkata, India",
   deliveryAddress: "Santosh Nagar",
   deliveryPromise: "20–30 mins",

@@ -50,6 +50,7 @@ export default function Products() {
       </View>
       <FlatList
         horizontal
+        style={{ flexGrow: 0, flexShrink: 0 }}
         data={categories}
         keyExtractor={(item) => item}
         showsHorizontalScrollIndicator={false}

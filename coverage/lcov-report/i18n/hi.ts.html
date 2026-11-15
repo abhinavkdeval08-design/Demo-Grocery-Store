@@ -1,0 +1,235 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for i18n/hi.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">i18n</a> hi.ts</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import type { Dict } from "./en";
+&nbsp;
+export const hi: Dict = {
+  "tab.home": "होम", "tab.shop": "खरीदारी", "tab.cart": "कार्ट", "tab.orders": "ऑर्डर", "tab.store": "स्टोर",
+  "common.cancel": "रद्द करें", "common.clear": "हटाएं",
+  "product.add": "जोड़ें", "product.outOfStock": "स्टॉक में नहीं",
+  "items.one": "{n} सामान", "items.other": "{n} सामान",
+  "cartbar.view": "कार्ट देखें", "cartbar.delivery": "{time} में डिलीवरी",
+  "shop.title": "खरीदारी", "shop.search": "सामान खोजें", "shop.empty": "कोई सामान नहीं मिला।",
+  "shop.saved": "पहले सेव किए हुए दाम दिख रहे हैं। अभी अपडेट नहीं हो सका।",
+  "filter.all": "सभी", "sort.featured": "खास", "sort.low": "दाम ↑", "sort.high": "दाम ↓", "sort.name": "नाम A–Z",
+  "cat.Staples": "राशन", "cat.Daily use": "रोज़ का सामान", "cat.Snacks": "नमकीन-स्नैक्स", "cat.Spices": "मसाले", "cat.Home care": "घर की सफ़ाई",
+  "home.delivers": "डिलीवरी यहाँ", "home.search": "चावल, चीनी, दूध खोजें...", "home.results": "खोज के नतीजे",
+  "home.noMatch": "कुछ नहीं मिला। कोई और सामान खोजें।", "home.byCategory": "श्रेणी से खरीदें", "home.buyAgain": "दोबारा खरीदें",
+  "home.repeat": "पिछला ऑर्डर दोहराएं", "home.popular": "पसंदीदा सामान", "home.under100": "₹100 से कम", "home.seeAll": "सभी देखें",
+  "reorder.note": "ऑर्डर की जानकारी", "reorder.none": "कुछ भी जोड़ा नहीं जा सका",
+  "orders.title": "ऑर्डर", "orders.sub": "आपके पुराने ऑर्डर", "orders.none": "अभी कोई ऑर्डर नहीं",
+  "orders.start": "खरीदारी शुरू करें", "orders.reorder": "दोबारा मंगाएं", "orders.khata": "खाते में जोड़ें",
+  "pd.add": "कार्ट में डालें", "pd.more": "एक और जोड़ें", "pd.oos": "अभी स्टॉक में नहीं है",
+  "pd.notfound": "सामान नहीं मिला", "pd.related": "ये भी पसंद आ सकते हैं",
+  "cart.title": "आपका कार्ट", "cart.sub": "चेकआउट से पहले अपना सामान देख लें।", "cart.inCart": "कार्ट में {items}",
+  "cart.empty": "कार्ट अभी खाली है", "cart.browse": "सामान देखें",
+  "cart.minMet": "न्यूनतम ऑर्डर पूरा हुआ", "cart.minMore": "न्यूनतम ऑर्डर के लिए ₹{n} और चाहिए",
+  "cart.freeMore": "मुफ़्त डिलीवरी के लिए ₹{n} और", "cart.freeOn": "मुफ़्त डिलीवरी मिल गई",
+  "cart.address": "डिलीवरी का पता", "cart.addAddress": "＋ पता जोड़ें", "cart.newAddress": "नया पता",
+  "cart.editAddress": "पता बदलें", "cart.saveAddress": "पता सेव करें",
+  "ph.name": "नाम", "ph.phone": "10 अंकों का फ़ोन नंबर", "ph.address": "पूरा पता", "ph.pincode": "6 अंकों का पिनकोड",
+  "err.name": "अपना नाम लिखें", "err.phone": "फ़ोन नंबर 10 अंकों का होना चाहिए",
+  "err.addr": "पता कम से कम 10 अक्षर का होना चाहिए", "err.pin6": "6 अंकों का पिनकोड लिखें",
+  "err.pinNo": "माफ़ करें, इस पिनकोड पर अभी डिलीवरी नहीं होती", "pin.ok": "यहाँ डिलीवरी होती है",
+  "cart.slot": "डिलीवरी का समय", "cart.slotNone": "अभी कोई समय खाली नहीं है। बाद में कोशिश करें।", "cart.slotDay": "पहले दिन चुनें।",
+  "cart.coupon": "कूपन", "cart.apply": "लगाएं", "cart.payment": "भुगतान", "cart.cod": "डिलीवरी पर नकद",
+  "cart.noUpi": "कोई UPI ऐप नहीं मिला। इस UPI ID पर भुगतान करें:", "cart.copyUpi": "UPI ID कॉपी करें", "cart.note": "ऑर्डर नोट (ज़रूरी नहीं)",
+  "cart.subtotal": "सामान का जोड़", "cart.delivery": "डिलीवरी", "cart.discount": "छूट", "cart.total": "कुल",
+  "cart.place": "WhatsApp पर ऑर्डर करें", "cart.payUpi": "UPI से ₹{n} दें", "cart.addMore": "₹{n} और जोड़ें",
+  "cart.paid": "मैंने भुगतान कर दिया - WhatsApp पर ऑर्डर भेजें", "cart.cancelPay": "भुगतान रद्द करें", "cart.clear": "कार्ट खाली करें",
+  "al.addr.t": "पता जोड़ें", "al.addr.m": "डिलीवरी का पता चुनें या जोड़ें।",
+  "al.slot.t": "डिलीवरी का समय चुनें", "al.slot.m": "डिलीवरी का दिन और समय चुनें।",
+  "al.min.t": "न्यूनतम ऑर्डर", "al.min.m": "आगे बढ़ने के लिए ₹{n} और जोड़ें।",
+  "al.clear.t": "कार्ट खाली करें?", "al.clear.m": "कार्ट से सारा सामान हट जाएगा।",
+  "al.pin.t": "डिलीवरी उपलब्ध नहीं", "al.pin.m": "माफ़ करें, इस पिनकोड पर अभी डिलीवरी नहीं होती। पता बदलकर सही पिनकोड डालें।",
+  "al.slotGone.t": "यह समय अब उपलब्ध नहीं", "al.slotGone.m": "यह समय बंद हो चुका है। कोई और चुनें।",
+  "al.wa.t": "WhatsApp नहीं खुला", "al.wa.m": "WhatsApp नहीं खुल सका। उसे इंस्टॉल करके फिर कोशिश करें। आपका कार्ट वैसा ही है।",
+  "cpn.invalid": "कूपन कोड सही नहीं है", "cpn.expired": "कूपन की तारीख निकल गई", "cpn.min": "न्यूनतम ऑर्डर ₹{n} होना चाहिए",
+  "cpn.none": "कूपन लग नहीं सका", "cpn.applied": "{code} लग गया: ₹{n} की छूट", "cpn.removed": "कूपन हटा दिया गया: {reason}",
+  "st.delivery": "डिलीवरी की जानकारी", "st.address": "दुकान का पता", "st.timings": "दुकान का समय", "st.contact": "संपर्क",
+  "st.owner": "मालिक", "st.primary": "मुख्य", "st.alternate": "दूसरा", "st.trusted": "भरोसेमंद स्थानीय दुकान",
+  "st.updated": "दाम आख़िरी बार अपडेट: {date}", "st.updatedFail": " (अपडेट नहीं हो सका)", "st.builtin": "दाम: ऐप की अपनी सूची",
+  "st.lang": "भाषा",
+};
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2026-11-15T03:54:23.484Z
+            </div>
+        <script src="../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../sorter.js"></script>
+        <script src="../block-navigation.js"></script>
+    </body>
+</html>
+    
