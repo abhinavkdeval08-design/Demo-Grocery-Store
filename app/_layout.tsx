@@ -6,10 +6,12 @@ import { Platform } from "react-native";
 import { theme } from "../theme";
 import { CartProvider } from "../context/CartContext";
 import { CartCatalogSync, CatalogProvider } from "../context/CatalogContext";
+import { LanguageProvider } from "../i18n";
 import { KhataProvider } from "../context/KhataContext";
 
 export default function RootLayout() {
   return (
+    <LanguageProvider>
     <CartProvider>
       <CatalogProvider>
       <KhataProvider>
@@ -52,5 +54,6 @@ export default function RootLayout() {
       </KhataProvider>
       </CatalogProvider>
     </CartProvider>
+    </LanguageProvider>
   );
 }

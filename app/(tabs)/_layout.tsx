@@ -1,5 +1,6 @@
 // app/(tabs)/_layout.tsx
 import { Ionicons } from "@expo/vector-icons";
+import { useT } from "../../i18n";
 import { Tabs } from "expo-router";
 import React from "react";
 import { Animated, Text, View } from "react-native";
@@ -94,6 +95,7 @@ function PillIcon({
 }
 
 export default function TabLayout() {
+  const { t } = useT();
   const { totalItems } = useCart();
 
   return (
@@ -124,10 +126,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: t("tab.home"),
           tabBarIcon: ({ color, focused }) => (
             <PillIcon
-              label="Home"
+              label={t("tab.home")}
               icon="home"
               color={color}
               focused={focused}
@@ -139,10 +141,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="products"
         options={{
-          title: "Shop",
+          title: t("tab.shop"),
           tabBarIcon: ({ color, focused }) => (
             <PillIcon
-              label="Shop"
+              label={t("tab.shop")}
               icon="grid"
               color={color}
               focused={focused}
@@ -154,10 +156,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="cart"
         options={{
-          title: "Cart",
+          title: t("tab.cart"),
           tabBarIcon: ({ color, focused }) => (
             <PillIcon
-              label="Cart"
+              label={t("tab.cart")}
               icon="cart"
               color={color}
               focused={focused}
@@ -171,9 +173,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="orders"
         options={{
-          title: "Orders",
+          title: t("tab.orders"),
           tabBarIcon: ({ color, focused }) => (
-            <PillIcon label="Orders" icon="receipt" color={color} focused={focused} />
+            <PillIcon label={t("tab.orders")} icon="receipt" color={color} focused={focused} />
           ),
         }}
       />
@@ -181,10 +183,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="store"
         options={{
-          title: "Store",
+          title: t("tab.store"),
           tabBarIcon: ({ color, focused }) => (
             <PillIcon
-              label="Store"
+              label={t("tab.store")}
               icon="storefront"
               color={color}
               focused={focused}

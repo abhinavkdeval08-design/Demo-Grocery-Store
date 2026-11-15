@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
+import { useT } from "../../i18n";
 import React from "react";
 import { FlatList, RefreshControl, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -11,6 +12,7 @@ import { useProductSearch } from "../../hooks/useProductSearch";
 import CartBar from "../../components/CartBar";
 
 export default function Products() {
+  const { t, cat } = useT();
   const { products, refresh, error } = useCatalog();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ filter?: string }>();
@@ -38,13 +40,13 @@ export default function Products() {
   return (
     <View style={[styles.container, { paddingTop: insets.top + 32 }]}>
       <View style={styles.headerRow}>
-        <View><Text style={styles.screenTitle}>Shop</Text><Text style={styles.screenSubtitle}>All items from {STORE.name} in one place.</Text></View>
+        <View><Text style={styles.screenTitle}>{t("shop.title")}</Text><Text style={styles.screenSubtitle}>All items from {STORE.name} in one place.</Text></View>
         <Ionicons name="funnel-outline" size={20} color={theme.colors.textSecondary} />
       </View>
-      {error ? <Text accessibilityRole="alert" style={styles.notice}>Showing saved prices. Could not refresh right now.</Text> : null}
+      {error ? <Text accessibilityRole="alert" style={styles.notice}>{t("shop.saved")}</Text> : null}
       <View style={styles.searchBox}>
         <Ionicons name="search" size={18} color={theme.colors.textSecondary} />
-        <TextInput accessibilityLabel="Search products" value={search} onChangeText={setSearch} placeholder="Search products" placeholderTextColor="#6B7280" style={styles.search} />
+        <TextInput accessibilityLabel="Search products" value={search} onChangeText={setSearch} placeholder={t("shop.search")} placeholderTextColor="#6B7280" style={styles.search} />
       </View>
       <FlatList
         horizontal
@@ -52,10 +54,10 @@ export default function Products() {
         keyExtractor={(item) => item}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.filterRow}
-        renderItem={({ item }) => <TouchableOpacity style={[styles.filterChip, activeFilter === item && styles.filterChipActive]} onPress={() => setActiveFilter(item)}><Text style={[styles.filterText, activeFilter === item && styles.filterTextActive]}>{item}</Text></TouchableOpacity>}
+        renderItem={({ item }) => <TouchableOpacity style={[styles.filterChip, activeFilter === item && styles.filterChipActive]} onPress={() => setActiveFilter(item)}><Text style={[styles.filterText, activeFilter === item && styles.filterTextActive]}>{item === "All" ? t("filter.all") : cat(item)}</Text></TouchableOpacity>}
       />
       <View style={styles.sortRow}>
-        {([["default", "Featured"], ["low", "Price ↑"], ["high", "Price ↓"], ["name", "Name A–Z"]] as const).map(([value, label]) => <TouchableOpacity key={value} onPress={() => setSort(value)}><Text style={[styles.sortText, sort === value && styles.sortActive]}>{label}</Text></TouchableOpacity>)}
+        {([["default", t("sort.featured")], ["low", t("sort.low")], ["high", t("sort.high")], ["name", t("sort.name")]] as const).map(([value, label]) => <TouchableOpacity key={value} onPress={() => setSort(value)}><Text style={[styles.sortText, sort === value && styles.sortActive]}>{label}</Text></TouchableOpacity>)}
       </View>
       <FlatList
         data={filteredProducts}
@@ -64,7 +66,7 @@ export default function Products() {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={async () => { setRefreshing(true); await refresh(); setRefreshing(false); }} tintColor={theme.colors.accent} />}
         ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
         renderItem={({ item }) => <ProductCard product={item} horizontal />}
-        ListEmptyComponent={<Text style={styles.empty}>No products found.</Text>}
+        ListEmptyComponent={<Text style={styles.empty}>{t("shop.empty")}</Text>}
       />
       <CartBar />
     </View>

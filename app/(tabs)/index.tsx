@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { useT } from "../../i18n";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -19,6 +20,7 @@ const CATEGORIES = [
 ] as const;
 
 export default function Home() {
+  const { t, items: itemsLabel, cat } = useT();
   const { products } = useCatalog();
   const router = useRouter();
   const { addToCart, orders } = useCart();
@@ -29,28 +31,28 @@ export default function Home() {
     if (!lastPlan) return;
     lastPlan.lines.forEach(({ product, quantity }) => { for (let i = 0; i < quantity; i += 1) addToCart(product); });
     const message = reorderMessage(lastPlan);
-    if (message) Alert.alert(lastPlan.lines.length ? "Reorder note" : "Nothing could be added", message);
+    if (message) Alert.alert(lastPlan.lines.length ? t("reorder.note") : t("reorder.none"), message);
     if (lastPlan.lines.length) router.push("/(tabs)/cart");
   };
   const { query, setQuery, results, recent, submitSearch } = useProductSearch(products);
   const [banner, setBanner] = React.useState(0);
   React.useEffect(() => { const timer = setInterval(() => setBanner((value) => (value + 1) % BANNERS.length), 4500); return () => clearInterval(timer); }, []);
   const sections = [
-    { title: "Popular picks", items: products.slice(0, 6) },
-    { title: "Under ₹100", items: products.filter((item) => item.price < 100).slice(0, 6) },
+    { title: t("home.popular"), items: products.slice(0, 6) },
+    { title: t("home.under100"), items: products.filter((item) => item.price < 100).slice(0, 6) },
   ];
   const searchActive = query.trim().length > 0;
   return <View style={styles.screen}>
     <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-      <View style={styles.top}><View><Text style={styles.label}>Delivers to</Text><Text style={styles.location}><Ionicons name="location" size={15} color="#A5B4FC" /> {STORE.deliveryAddress}</Text></View><View style={styles.avatar}><Text style={styles.avatarText}>A</Text></View></View>
+      <View style={styles.top}><View><Text style={styles.label}>{t("home.delivers")}</Text><Text style={styles.location}><Ionicons name="location" size={15} color="#A5B4FC" /> {STORE.deliveryAddress}</Text></View><View style={styles.avatar}><Text style={styles.avatarText}>A</Text></View></View>
       <View style={[styles.banner, { backgroundColor: BANNERS[banner].color }]}><View style={{ flex: 1 }}><Text style={styles.bannerTitle}>{BANNERS[banner].title}</Text><Text style={styles.bannerSubtitle}>{BANNERS[banner].subtitle}</Text></View><Ionicons name={BANNERS[banner].icon} size={54} color="#BBF7D0" /></View>
       <View style={styles.dots}>{BANNERS.map((item, index) => <View key={item.id} style={[styles.dot, index === banner && styles.activeDot]} />)}</View>
-      <View style={styles.searchBox}><Ionicons name="search" size={19} color={theme.colors.textSecondary} /><TextInput accessibilityLabel="Search products" value={query} onChangeText={setQuery} onSubmitEditing={() => submitSearch()} returnKeyType="search" placeholder="Search rice, sugar, milk..." placeholderTextColor="#6B7280" style={styles.search} />{query ? <TouchableOpacity accessibilityLabel="Clear search" onPress={() => setQuery("")}><Ionicons name="close-circle" size={18} color={theme.colors.textSecondary} /></TouchableOpacity> : null}</View>
-      {searchActive ? <View><Text style={styles.heading}>Search results</Text>{results.length ? <View style={styles.grid}>{results.map((item) => <ProductCard key={item.id} product={item} />)}</View> : <View style={styles.empty}><Ionicons name="search-outline" size={34} color="#6B7280" /><Text style={styles.emptyText}>No matches yet. Try another item.</Text></View>}{recent.length ? <Text style={styles.recent}>Recent: {recent.join("  ·  ")}</Text> : null}</View> : <>
-        <Text style={styles.heading}>Shop by category</Text><View style={styles.categories}>{CATEGORIES.map(([name, icon]) => <TouchableOpacity accessibilityLabel={`Shop ${name}`} key={name} style={styles.category} onPress={() => router.push({ pathname: "/(tabs)/products", params: { filter: name } })}><Ionicons name={icon} size={23} color={theme.colors.accent} /><Text style={styles.categoryText}>{name}</Text></TouchableOpacity>)}</View>
-        {lastPlan && lastPlan.lines.length > 0 && <TouchableOpacity accessibilityLabel="Repeat last order" style={styles.quick} onPress={repeatLast}><Text style={styles.quickName}>Repeat last order</Text><Text style={styles.quickPrice}>{lastPlan.lines.length} item{lastPlan.lines.length === 1 ? "" : "s"} · ₹{lastPlan.total}</Text></TouchableOpacity>}
-        {again.length > 0 && <><Text style={styles.heading}>Buy again</Text><ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.row}>{again.map((item) => <TouchableOpacity accessibilityLabel={`Quick add ${item.name}`} key={item.id} style={styles.quick} onPress={() => addToCart(item)}><Image source={item.image} style={styles.quickImage} /><Text style={styles.quickName} numberOfLines={1}>{item.name}</Text><Text style={styles.quickPrice}>₹{item.price}</Text></TouchableOpacity>)}</ScrollView></>}
-        {sections.map((section) => <View key={section.title}><View style={styles.headingRow}><Text style={styles.heading}>{section.title}</Text><TouchableOpacity accessibilityLabel={`See all ${section.title}`} onPress={() => router.push("/(tabs)/products")}><Text style={styles.seeAll}>See all</Text></TouchableOpacity></View><View style={styles.grid}>{section.items.map((item) => <ProductCard key={item.id} product={item} />)}</View></View>)}
+      <View style={styles.searchBox}><Ionicons name="search" size={19} color={theme.colors.textSecondary} /><TextInput accessibilityLabel="Search products" value={query} onChangeText={setQuery} onSubmitEditing={() => submitSearch()} returnKeyType="search" placeholder={t("home.search")} placeholderTextColor="#6B7280" style={styles.search} />{query ? <TouchableOpacity accessibilityLabel="Clear search" onPress={() => setQuery("")}><Ionicons name="close-circle" size={18} color={theme.colors.textSecondary} /></TouchableOpacity> : null}</View>
+      {searchActive ? <View><Text style={styles.heading}>{t("home.results")}</Text>{results.length ? <View style={styles.grid}>{results.map((item) => <ProductCard key={item.id} product={item} />)}</View> : <View style={styles.empty}><Ionicons name="search-outline" size={34} color="#6B7280" /><Text style={styles.emptyText}>{t("home.noMatch")}</Text></View>}{recent.length ? <Text style={styles.recent}>Recent: {recent.join("  ·  ")}</Text> : null}</View> : <>
+        <Text style={styles.heading}>{t("home.byCategory")}</Text><View style={styles.categories}>{CATEGORIES.map(([name, icon]) => <TouchableOpacity accessibilityLabel={`Shop ${name}`} key={name} style={styles.category} onPress={() => router.push({ pathname: "/(tabs)/products", params: { filter: name } })}><Ionicons name={icon} size={23} color={theme.colors.accent} /><Text style={styles.categoryText}>{cat(name)}</Text></TouchableOpacity>)}</View>
+        {lastPlan && lastPlan.lines.length > 0 && <TouchableOpacity accessibilityLabel="Repeat last order" style={styles.quick} onPress={repeatLast}><Text style={styles.quickName}>{t("home.repeat")}</Text><Text style={styles.quickPrice}>{itemsLabel(lastPlan.lines.length)} · ₹{lastPlan.total}</Text></TouchableOpacity>}
+        {again.length > 0 && <><Text style={styles.heading}>{t("home.buyAgain")}</Text><ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.row}>{again.map((item) => <TouchableOpacity accessibilityLabel={`Quick add ${item.name}`} key={item.id} style={styles.quick} onPress={() => addToCart(item)}><Image source={item.image} style={styles.quickImage} /><Text style={styles.quickName} numberOfLines={1}>{item.name}</Text><Text style={styles.quickPrice}>₹{item.price}</Text></TouchableOpacity>)}</ScrollView></>}
+        {sections.map((section) => <View key={section.title}><View style={styles.headingRow}><Text style={styles.heading}>{section.title}</Text><TouchableOpacity accessibilityLabel={`See all ${section.title}`} onPress={() => router.push("/(tabs)/products")}><Text style={styles.seeAll}>{t("home.seeAll")}</Text></TouchableOpacity></View><View style={styles.grid}>{section.items.map((item) => <ProductCard key={item.id} product={item} />)}</View></View>)}
       </>}
     </ScrollView><CartBar />
   </View>;
